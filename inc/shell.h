@@ -15,7 +15,7 @@ void lsh_loop();
 
 std::string read_line();
 
-std::vector<std::string> split_line(const std::string &line);
+std::vector<std::string> split_line(std::string &line);
 
 int launch(char **args);
 
