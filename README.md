@@ -1,8 +1,8 @@
-# Lab 2 Option 3: Adder
+# Lab 3 fork-exec: myshell
 
 ## Team
 
- - [Volodymyr Chernetskyi](https://github.com/chernetskyi)
+ - [Yuriy Pasichnyk](https://github.com/Fenix-125)
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ The rest prerequisites (such as development libraries) can be found in the [pack
 
 1. Clone the project.
     ```bash
-    git clone git@github.com:chernetskyi/cpp-template.git
+    git clone git@https://github.com/Fenix-125/myshell.git
     ```
 2. Install required libraries. On Ubuntu:
    ```bash

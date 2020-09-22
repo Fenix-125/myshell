@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(adder CXX)
+project(myshell CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -13,14 +13,23 @@ include(cmake/config.cmake)
 
 # Project source compilation
 include_directories(inc)
-add_library(operations SHARED src/operations.cpp inc/operations/operations.hpp)
-add_executable(add src/main.cpp)
-target_link_libraries(add operations)
+#file(GLOB_RECURSE SRC "src/*.cpp" "inc/*.hpp" "inc/*.h")
+add_executable(myshell src/main.cpp)
+#add_library(operations SHARED src/operations.cpp inc/operations/operations.hpp)
+#add_executable(add src/main.cpp ${SRC})
+
+#target_link_libraries(add operations)
 
 # Add external packages
 find_package(Boost 1.71.0 COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
-target_link_libraries(add Boost::program_options)
+target_link_libraries(myshell Boost::program_options)
+
+#find_package(Readline REQUIRED)
+#include_directories(${Readline_INCLUDE_DIR})
+#target_link_libraries(myshell Readline)
+
+add_executable(victim2  src/victim_adv_main.cpp)
 
 # Sanitizers configuration
 if (ENABLE_SANITIZERS)
