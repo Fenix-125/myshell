@@ -5,27 +5,27 @@
 #ifndef LAB3_MYSHELL_SHELL_H
 #define LAB3_MYSHELL_SHELL_H
 
-
 #include <map>
+#include <vector>
 
-class shell {
-public:
-    shell();
+#define LSH_TOK_BUFSIZE 64
+#define LSH_TOK_DELIM " \t\r\n\a"
 
-    ~shell();
+void lsh_loop();
 
-//    int execute();
-    int execute(const std::string &program_name, char **argv);
+std::string read_line();
 
-    int loop();
+std::vector<std::string> split_line(const std::string &line);
 
-    int update_history();
+int launch(char **args);
 
-private:
-    std::string pwd;
-    int error_code = 0;
-    std::map<std::string, std::string> local_variables;
-};
+int mcd(char **args);
 
+int mexit(char **args);
+
+int num_builtin_commands();
+
+int execute(char **args);
 
 #endif //LAB3_MYSHELL_SHELL_H
+
