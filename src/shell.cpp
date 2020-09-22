@@ -16,12 +16,14 @@
 
 char *builtin_str[] = {
         "mcd",
-        "mexit"
+        "mexit",
+        "mpwd"
 };
 
 int (*builtin_commands[])(char **) = {
         &mcd,
-        &mexit
+        &mexit,
+        &mpwd
 };
 
 int num_builtin_commands() {
@@ -121,6 +123,10 @@ int mcd(char **argv) {
 
 int mexit(char **argv) {
     exit(EXIT_SUCCESS);
+}
+
+int mpwd(char **argv) {
+    std::cout << std::filesystem::current_path() << std::endl;
 }
 
 //shell::shell() {

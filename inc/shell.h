@@ -17,15 +17,19 @@ std::string read_line();
 
 std::vector<std::string> split_line(std::string &line);
 
-int launch(char **args);
-
-int mcd(char **args);
-
-int mexit(char **args);
-
 int num_builtin_commands();
 
-int execute(char **args);
+int execute(char **argv);
+
+int launch(char **argv);
+
+int mcd(char **argv);
+
+int mexit(char **argv);
+
+int mpwd(char **argv);
+
+int mecho(char **argv);
 
 #endif //LAB3_MYSHELL_SHELL_H
 
