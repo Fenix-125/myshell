@@ -5,6 +5,8 @@
 // Created by myralllka on 9/22/20.
 //
 
+// TODO: create preprocessor function (strip + expand vars + delete comments started with '#')
+
 #include <unistd.h>
 #include <filesystem>
 #include <boost/algorithm/string.hpp>
@@ -20,13 +22,17 @@
 char *builtin_str[] = {
         "mcd",
         "mexit",
-        "mpwd"
+        "mpwd",
+        "mecho",
+        "mexport"
 };
 
 int (*builtin_commands[])(std::vector<const char *>) = {
         &mcd,
         &mexit,
-        &mpwd
+        &mpwd,
+        &mecho,
+        &mexport
 };
 
 int num_builtin_commands() {
@@ -98,7 +104,7 @@ void lsh_loop() {
     int status;
     do {
         std::vector<const char *> arguments_for_execv;
-        std::cout << std::filesystem::current_path() << " $ ";
+        std::cout << std::filesystem::current_path().c_str() << " $ ";
         line = read_line();
         tmp = split_line(line);
         arguments_for_execv.reserve(tmp.size() + 1);
@@ -134,50 +140,66 @@ int mpwd(std::vector<const char *> argv) {
     return 1;
 }
 
-//shell::shell() {
-//    char *buff = new char[PATH_MAX];
-//    auto cwd = getcwd(buff, PATH_MAX);
-//    pwd = cwd;
-//
-//    std::string path = std::getenv("PATH");
-//    path += ":" + pwd;
-//    setenv("PATH", path.c_str(), 1);
-//
-//}
+int mecho(std::vector<const char *> argv) {
+    for (int i = 1; i < argv.size(); ++i) {
+        if (argv[i] != nullptr) {
+            std::cout << argv[i] << " ";
+        }
+    }
+    return EXIT_SUCCESS;
+}
 
-//loop() {
-//    char *argv[BOOST_FUNCTION_MAX_argv];
-//    std::cout << pwd << " $ >" << std::endl;
-//    std::string parameters;
-//    getline(std::cin, parameters);
-//    std::vector<std::string> pars;
-//    boost::split(pars, parameters, boost::is_any_of(" "));
-//
-//    for (size_t i = 1; i < pars.size(); ++i) {
-//        argv[i] = pars[i].data();
-//        std::cout << argv[i] << std::endl;
-//    }
-//
-//    execute(pars[0], argv);
-//
-//    free(argv);
-//    return EXIT_SUCCESS;
-//}
-//
-//execute(const std::string &program_name, char **argv) {
-//    pid_t pid = fork();
-//    char **vars = new char *[4096];
-//
-//    if (pid == -1) {
-//        std::cerr << "fork failed" << std::endl;
-//    } else if (pid == 0) {
-//        auto err = execve(program_name.c_str(), argv, vars);
-//        std::cout << err << std::endl;
-//    } else {
-//        std::cout << "father" << std::endl;
-//        int status;
-//        (void) waitpid(pid, &status, 0);
-//        std::cout << "closed" << std::endl;
-//    }
-//    free(vars);
-//}
+int mexport(std::vector<const char *> argv) {
+
+    return EXIT_SUCCESS;
+}
+
+/*
+shell::shell() {
+    char *buff = new char[PATH_MAX];
+    auto cwd = getcwd(buff, PATH_MAX);
+    pwd = cwd;
+
+    std::string path = std::getenv("PATH");
+    path += ":" + pwd;
+    setenv("PATH", path.c_str(), 1);
+
+}*/
+
+/*
+loop() {
+    char *argv[BOOST_FUNCTION_MAX_argv];
+    std::cout << pwd << " $ >" << std::endl;
+    std::string parameters;
+    getline(std::cin, parameters);
+    std::vector<std::string> pars;
+    boost::split(pars, parameters, boost::is_any_of(" "));
+
+    for (size_t i = 1; i < pars.size(); ++i) {
+        argv[i] = pars[i].data();
+        std::cout << argv[i] << std::endl;
+    }
+
+    execute(pars[0], argv);
+
+    free(argv);
+    return EXIT_SUCCESS;
+}
+
+execute(const std::string &program_name, char **argv) {
+    pid_t pid = fork();
+    char **vars = new char *[4096];
+
+    if (pid == -1) {
+        std::cerr << "fork failed" << std::endl;
+    } else if (pid == 0) {
+        auto err = execve(program_name.c_str(), argv, vars);
+        std::cout << err << std::endl;
+    } else {
+        std::cout << "father" << std::endl;
+        int status;
+        (void) waitpid(pid, &status, 0);
+        std::cout << "closed" << std::endl;
+    }
+    free(vars);
+}*/
