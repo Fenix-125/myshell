@@ -50,6 +50,7 @@ bool execute(std::vector<std::string> argv) {
         }
     }
 
+    args_for_execvp.reserve(argv.size());
     for (const auto &el:argv) {
         args_for_execvp.push_back(el.c_str());
     }
