@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 //
 // Created by myralllka on 9/22/20.
 //
@@ -20,7 +23,7 @@ char *builtin_str[] = {
         "mpwd"
 };
 
-int (*builtin_commands[])(char **) = {
+int (*builtin_commands[])(std::vector<const char *>) = {
         &mcd,
         &mexit,
         &mpwd
@@ -30,15 +33,15 @@ int num_builtin_commands() {
     return sizeof(builtin_str) / sizeof(char *);
 }
 
-int launch(char **argv) {
+int launch(std::vector<const char *> argv) {
     pid_t pid;
     int status;
 
     pid = fork();
     if (pid == 0) {
         // Child process
-        if (execvp(argv[0], argv) == -1) {
-            std::cerr << "error while execvp" << std::endl;
+        if (execvp(argv[0], const_cast<char *const *>(argv.data()))) {
+            std::cerr << "error while execvp: " << argv[0] << std::endl;
             exit(EXIT_FAILURE);
         }
         exit(EXIT_FAILURE);
@@ -55,7 +58,7 @@ int launch(char **argv) {
     return 1;
 }
 
-int execute(char **argv) {
+int execute(std::vector<const char *> argv) {
     int i;
 
     if (argv[0] == nullptr) {
@@ -89,28 +92,26 @@ std::vector<std::string> split_line(std::string &line) {
 }
 
 void lsh_loop() {
-
     std::string line;
-    char **argv = new char *[4096];
-    int status;
+    std::vector<std::string> tmp;
 
+    int status;
     do {
+        std::vector<const char *> arguments_for_execv;
         std::cout << std::filesystem::current_path() << " $ ";
         line = read_line();
-        auto tmp = split_line(line);
-        size_t i;
-        for (i = 0; i < tmp.size(); ++i) {
-            argv[i] = tmp[i].data();
+        tmp = split_line(line);
+        arguments_for_execv.reserve(tmp.size() + 1);
+        for (const auto &parameter:tmp) {
+            arguments_for_execv.push_back(parameter.c_str());
         }
-        argv[i + 1] = nullptr;
+        arguments_for_execv.push_back(nullptr);
+        status = execute(arguments_for_execv);
 
-        status = execute(argv);
-
-        delete[] argv;
     } while (status);
 }
 
-int mcd(char **argv) {
+int mcd(std::vector<const char *> argv) {
     if (argv[1] == nullptr) {
         chdir(getenv("HOME"));
     } else {
@@ -121,12 +122,16 @@ int mcd(char **argv) {
     return 1;
 }
 
-int mexit(char **argv) {
-    exit(EXIT_SUCCESS);
+int mexit(std::vector<const char *> argv) {
+    if (argv[1] == nullptr) {
+        exit(EXIT_SUCCESS);
+    }
+    exit(atoi(argv[1]));
 }
 
-int mpwd(char **argv) {
+int mpwd(std::vector<const char *> argv) {
     std::cout << std::filesystem::current_path() << std::endl;
+    return 1;
 }
 
 //shell::shell() {

@@ -19,15 +19,15 @@ std::vector<std::string> split_line(std::string &line);
 
 int num_builtin_commands();
 
-int execute(char **argv);
+int execute(std::vector<char *> argv);
 
-int launch(char **argv);
+int launch(std::vector<const char *> argv);
 
-int mcd(char **argv);
+int mcd(std::vector<const char *> argv);
 
-int mexit(char **argv);
+int mexit(std::vector<const char *> argv);
 
-int mpwd(char **argv);
+int mpwd(std::vector<const char *> argv);
 
 int mecho(char **argv);
 
