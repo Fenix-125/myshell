@@ -11,10 +11,12 @@
 #include <wait.h>
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <cctype>
+#include <locale>
 
 #include "shell.h"
 
-#define LSH_TOK_BUFSIZE 64
 #define LSH_TOK_DELIM " \t\r\n\a"
 
 char *builtin_str[] = {
@@ -33,7 +35,7 @@ int num_builtin_commands() {
     return sizeof(builtin_str) / sizeof(char *);
 }
 
-int launch(std::vector<const char *> argv) {
+bool launch(std::vector<const char *> argv) {
     pid_t pid;
     int status;
 
@@ -42,20 +44,18 @@ int launch(std::vector<const char *> argv) {
         // Child process
         if (execvp(argv[0], const_cast<char *const *>(argv.data()))) {
             std::cerr << "error while execvp: " << argv[0] << std::endl;
-            exit(EXIT_FAILURE);
         }
         exit(EXIT_FAILURE);
     } else if (pid < 0) {
         // Error forking
         std::cerr << "error while fork" << std::endl;
-        exit(EXIT_FAILURE);
     } else {
         // Parent process
         do {
             waitpid(pid, &status, WUNTRACED);
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
-    return 1;
+    return true;
 }
 
 int execute(std::vector<const char *> argv) {
@@ -78,6 +78,9 @@ std::string read_line() {
     std::string line;
     getline(std::cin, line);
     if (line.empty()) {
+        if (std::cin.eof()) {
+            exit(EXIT_SUCCESS);
+        }
         std::cerr << "error while reading line" << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -85,8 +88,18 @@ std::string read_line() {
 
 }
 
+static inline void strip(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }));
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
 std::vector<std::string> split_line(std::string &line) {
     std::vector<std::string> result;
+    strip(line);
     boost::split(result, line, boost::is_any_of(" "));
     return result;
 }
@@ -111,7 +124,7 @@ void lsh_loop() {
     } while (status);
 }
 
-int mcd(std::vector<const char *> argv) {
+int mcd(std::vector<const char *> &argv) {
     if (argv[1] == nullptr) {
         chdir(getenv("HOME"));
     } else {
@@ -129,7 +142,7 @@ int mexit(std::vector<const char *> argv) {
     exit(atoi(argv[1]));
 }
 
-int mpwd(std::vector<const char *> argv) {
+int mpwd([[maybe_unused]] const std::vector<const char *> &argv) {
     std::cout << std::filesystem::current_path() << std::endl;
     return 1;
 }
