@@ -5,9 +5,8 @@
 // Created by myralllka on 9/22/20.
 //
 
-// TODO: strip
 // TODO: expand vars
-// TODO: delete comments started with '#'
+// TODO: GLOB's
 
 #include <unistd.h>
 #include <filesystem>
@@ -28,7 +27,7 @@ std::vector<std::string> builtin_str = {
         "mexport"
 };
 
-int (*builtin_commands[])(std::vector<const char *> &) = {
+int (*builtin_commands[])(std::vector<std::string> &) = {
         &mcd,
         &mexit,
         &mpwd,
@@ -36,15 +35,31 @@ int (*builtin_commands[])(std::vector<const char *> &) = {
         &mexport
 };
 
-
-bool launch(std::vector<const char *> argv) {
+bool execute(std::vector<std::string> argv) {
     pid_t pid;
     int status;
+    std::vector<const char *> args_for_execvp;
 
+    if (argv.empty()) {
+        return true;
+    }
+
+    for (size_t i = 0; i < builtin_str.size(); i++) {
+        if (argv[0] == builtin_str[i]) {
+            return (*builtin_commands[i])(argv);
+        }
+    }
+
+    for (const auto &el:argv) {
+        args_for_execvp.push_back(el.c_str());
+    }
+
+    args_for_execvp.push_back(nullptr);
     pid = fork();
+
     if (pid == 0) {
         // Child process
-        if (execvp(argv[0], const_cast<char *const *>(argv.data()))) {
+        if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
             std::cerr << "error while execvp: " << argv[0] << std::endl;
         }
         exit(EXIT_FAILURE);
@@ -58,19 +73,6 @@ bool launch(std::vector<const char *> argv) {
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
     return true;
-}
-
-int execute(std::vector<const char *> argv) {
-    if (argv[0] == nullptr) {
-        return EXIT_FAILURE;
-    }
-    for (size_t i = 0; i < builtin_str.size(); i++) {
-        if (strcmp(argv[0], builtin_str[i].data()) == 0) {
-            return (*builtin_commands[i])(argv);
-        }
-    }
-
-    return launch(argv);
 }
 
 std::string read_line() {
@@ -107,58 +109,54 @@ std::vector<std::string> split_line(std::string &line) {
 void loop() {
     std::string line;
     std::vector<std::string> tmp;
-
     int status;
     do {
-        std::vector<const char *> arguments_for_execv;
+        std::vector<std::string> arguments_for_execv;
         std::cout << std::filesystem::current_path().c_str() << " $ ";
         line = read_line();
         strip(line);
         tmp = split_line(line);
         arguments_for_execv.reserve(tmp.size() + 1);
         for (const auto &parameter:tmp) {
-            arguments_for_execv.push_back(parameter.c_str());
-//            std::cerr << parameter.c_str() << std::endl;
+            arguments_for_execv.push_back(parameter);
         }
-        arguments_for_execv.push_back(nullptr);
         status = execute(arguments_for_execv);
-
     } while (status);
 }
 
-int mcd(std::vector<const char *> &argv) {
+int mcd(std::vector<std::string> &argv) {
     if (argv[1] == nullptr) {
         chdir(getenv("HOME"));
     } else {
-        if (chdir(argv[1]) != 0) {
+        if (chdir(argv[1].c_str()) != 0) {
             std::cout << "error while cd" << std::endl;
         }
     }
     return 1;
 }
 
-int mexit(std::vector<const char *> &argv) {
-    if (argv[1] == nullptr) {
+int mexit(std::vector<std::string> &argv) {
+    if (argv[1].empty()) {
         exit(EXIT_SUCCESS);
     }
-    exit(atoi(argv[1]));
+    exit(std::stoi(argv[1]));
 }
 
-int mpwd([[maybe_unused]] std::vector<const char *> &argv) {
+int mpwd([[maybe_unused]] std::vector<std::string> &argv) {
     std::cout << std::filesystem::current_path() << std::endl;
     return 1;
 }
 
-int mecho(std::vector<const char *> &argv) {
+int mecho(std::vector<std::string> &argv) {
     for (size_t i = 1; i < argv.size(); ++i) {
-        if (argv[i] != nullptr) {
+        if (!argv[i].empty()) {
             std::cout << argv[i] << " ";
         }
     }
     return 1;
 }
 
-int mexport(std::vector<const char *> &argv) {
+int mexport(std::vector<std::string> &argv) {
     // TODO: realize this func!
     return 1;
 }

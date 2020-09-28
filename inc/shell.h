@@ -17,19 +17,19 @@ std::string read_line();
 
 std::vector<std::string> split_line(std::string &line);
 
-int execute(std::vector<const char *> argv);
+bool execute(std::vector<std::string> argv);
 
-bool launch(std::vector<const char *> argv);
+bool launch(std::vector<std::string> argv);
 
-int mcd(std::vector<const char *> &argv);
+int mcd(std::vector<std::string> &argv);
 
-int mexit(std::vector<const char *> &argv);
+int mexit(std::vector<std::string> &argv);
 
-int mpwd([[maybe_unused]] std::vector<const char *> &argv);
+int mpwd([[maybe_unused]] std::vector<std::string> &argv);
 
-int mecho(std::vector<const char *> &argv);
+int mecho(std::vector<std::string> &argv);
 
-int mexport(std::vector<const char *> &argv);
+int mexport(std::vector<std::string> &argv);
 
 #endif //LAB3_MYSHELL_SHELL_H
 
