@@ -29,7 +29,9 @@ int mexit(std::vector<const char *> argv);
 
 int mpwd([[maybe_unused]] const std::vector<const char *>& argv);
 
-int mecho(char **argv);
+int mecho(std::vector<const char *> argv);
+
+int mexport(std::vector<const char *> argv);
 
 #endif //LAB3_MYSHELL_SHELL_H
 
