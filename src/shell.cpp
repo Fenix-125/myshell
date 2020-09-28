@@ -125,25 +125,27 @@ void loop() {
 }
 
 int mcd(std::vector<std::string> &argv) {
-    if (argv[1] == nullptr) {
+    if (argv.size() == 1) {
         chdir(getenv("HOME"));
     } else {
         if (chdir(argv[1].c_str()) != 0) {
-            std::cout << "error while cd" << std::endl;
+            std::cout << "error while mcd" << std::endl;
         }
     }
     return 1;
 }
 
 int mexit(std::vector<std::string> &argv) {
-    if (argv[1].empty()) {
+    if (argv.empty()) {
         exit(EXIT_SUCCESS);
+    } else if (argv.size() > 2) {
+        std::cerr << "mexit: too many arguments" << std::endl;
     }
     exit(std::stoi(argv[1]));
 }
 
 int mpwd([[maybe_unused]] std::vector<std::string> &argv) {
-    std::cout << std::filesystem::current_path() << std::endl;
+    std::cout << std::filesystem::current_path().c_str() << std::endl;
     return 1;
 }
 
@@ -153,6 +155,7 @@ int mecho(std::vector<std::string> &argv) {
             std::cout << argv[i] << " ";
         }
     }
+    std::cout << std::endl;
     return 1;
 }
 
