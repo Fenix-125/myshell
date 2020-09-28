@@ -14,12 +14,12 @@
 #include <iostream>
 #include "shell.h"
 
-int main(int argc, char **argv)
+int main()
 {
     // Load config files, if any.
 
     // Run command loop.
-    lsh_loop();
+    loop();
 
     // Perform any shutdown/cleanup.
 

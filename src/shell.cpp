@@ -5,7 +5,9 @@
 // Created by myralllka on 9/22/20.
 //
 
-// TODO: create preprocessor function (strip + expand vars + delete comments started with '#')
+// TODO: strip
+// TODO: expand vars
+// TODO: delete comments started with '#'
 
 #include <unistd.h>
 #include <filesystem>
@@ -15,13 +17,10 @@
 #include <vector>
 #include <algorithm>
 #include <cctype>
-#include <locale>
 
 #include "shell.h"
 
-#define LSH_TOK_DELIM " \t\r\n\a"
-
-char *builtin_str[] = {
+std::vector<std::string> builtin_str = {
         "mcd",
         "mexit",
         "mpwd",
@@ -29,7 +28,7 @@ char *builtin_str[] = {
         "mexport"
 };
 
-int (*builtin_commands[])(std::vector<const char *>) = {
+int (*builtin_commands[])(std::vector<const char *> &) = {
         &mcd,
         &mexit,
         &mpwd,
@@ -37,9 +36,6 @@ int (*builtin_commands[])(std::vector<const char *>) = {
         &mexport
 };
 
-int num_builtin_commands() {
-    return sizeof(builtin_str) / sizeof(char *);
-}
 
 bool launch(std::vector<const char *> argv) {
     pid_t pid;
@@ -65,14 +61,11 @@ bool launch(std::vector<const char *> argv) {
 }
 
 int execute(std::vector<const char *> argv) {
-    int i;
-
     if (argv[0] == nullptr) {
-        return 1;
+        return EXIT_FAILURE;
     }
-
-    for (i = 0; i < num_builtin_commands(); i++) {
-        if (strcmp(argv[0], builtin_str[i]) == 0) {
+    for (size_t i = 0; i < builtin_str.size(); i++) {
+        if (strcmp(argv[0], builtin_str[i].data()) == 0) {
             return (*builtin_commands[i])(argv);
         }
     }
@@ -91,7 +84,6 @@ std::string read_line() {
         exit(EXIT_FAILURE);
     }
     return line;
-
 }
 
 static inline void strip(std::string &s) {
@@ -101,16 +93,18 @@ static inline void strip(std::string &s) {
     s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
         return !std::isspace(ch);
     }).base(), s.end());
+    if (size_t index = s.find('#') != std::string::npos) {
+        s.erase(s.begin() + index + 1, s.end());
+    }
 }
 
 std::vector<std::string> split_line(std::string &line) {
     std::vector<std::string> result;
-    strip(line);
     boost::split(result, line, boost::is_any_of(" "));
     return result;
 }
 
-void lsh_loop() {
+void loop() {
     std::string line;
     std::vector<std::string> tmp;
 
@@ -119,10 +113,12 @@ void lsh_loop() {
         std::vector<const char *> arguments_for_execv;
         std::cout << std::filesystem::current_path().c_str() << " $ ";
         line = read_line();
+        strip(line);
         tmp = split_line(line);
         arguments_for_execv.reserve(tmp.size() + 1);
         for (const auto &parameter:tmp) {
             arguments_for_execv.push_back(parameter.c_str());
+//            std::cerr << parameter.c_str() << std::endl;
         }
         arguments_for_execv.push_back(nullptr);
         status = execute(arguments_for_execv);
@@ -141,78 +137,28 @@ int mcd(std::vector<const char *> &argv) {
     return 1;
 }
 
-int mexit(std::vector<const char *> argv) {
+int mexit(std::vector<const char *> &argv) {
     if (argv[1] == nullptr) {
         exit(EXIT_SUCCESS);
     }
     exit(atoi(argv[1]));
 }
 
-int mpwd([[maybe_unused]] const std::vector<const char *> &argv) {
+int mpwd([[maybe_unused]] std::vector<const char *> &argv) {
     std::cout << std::filesystem::current_path() << std::endl;
     return 1;
 }
 
-int mecho(std::vector<const char *> argv) {
-    for (int i = 1; i < argv.size(); ++i) {
+int mecho(std::vector<const char *> &argv) {
+    for (size_t i = 1; i < argv.size(); ++i) {
         if (argv[i] != nullptr) {
             std::cout << argv[i] << " ";
         }
     }
-    return EXIT_SUCCESS;
+    return 1;
 }
 
-int mexport(std::vector<const char *> argv) {
-
-    return EXIT_SUCCESS;
+int mexport(std::vector<const char *> &argv) {
+    // TODO: realize this func!
+    return 1;
 }
-
-/*
-shell::shell() {
-    char *buff = new char[PATH_MAX];
-    auto cwd = getcwd(buff, PATH_MAX);
-    pwd = cwd;
-
-    std::string path = std::getenv("PATH");
-    path += ":" + pwd;
-    setenv("PATH", path.c_str(), 1);
-
-}*/
-
-/*
-loop() {
-    char *argv[BOOST_FUNCTION_MAX_argv];
-    std::cout << pwd << " $ >" << std::endl;
-    std::string parameters;
-    getline(std::cin, parameters);
-    std::vector<std::string> pars;
-    boost::split(pars, parameters, boost::is_any_of(" "));
-
-    for (size_t i = 1; i < pars.size(); ++i) {
-        argv[i] = pars[i].data();
-        std::cout << argv[i] << std::endl;
-    }
-
-    execute(pars[0], argv);
-
-    free(argv);
-    return EXIT_SUCCESS;
-}
-
-execute(const std::string &program_name, char **argv) {
-    pid_t pid = fork();
-    char **vars = new char *[4096];
-
-    if (pid == -1) {
-        std::cerr << "fork failed" << std::endl;
-    } else if (pid == 0) {
-        auto err = execve(program_name.c_str(), argv, vars);
-        std::cout << err << std::endl;
-    } else {
-        std::cout << "father" << std::endl;
-        int status;
-        (void) waitpid(pid, &status, 0);
-        std::cout << "closed" << std::endl;
-    }
-    free(vars);
-}*/
