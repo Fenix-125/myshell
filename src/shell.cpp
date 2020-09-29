@@ -21,10 +21,10 @@
 #include <vector>
 #include <algorithm>
 #include <cctype>
-
-#include "shell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+
+#include "shell.h"
 
 std::vector<std::string> builtin_str = {
         // TODO: vector of functions

@@ -8,9 +8,6 @@
 #include <map>
 #include <vector>
 
-#define LSH_TOK_BUFSIZE 64
-#define LSH_TOK_DELIM " \t\r\n\a"
-
 void loop();
 
 std::string read_line();
