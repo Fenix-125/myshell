@@ -7,6 +7,11 @@
 
 // TODO: expand vars
 // TODO: GLOB's
+// TODO: columns parsing
+// TODO: add ./bin to PATH
+// TODO: mexport
+// TODO: scripts .msh files
+// TODO: add merrno
 
 #include <unistd.h>
 #include <filesystem>
@@ -18,6 +23,8 @@
 #include <cctype>
 
 #include "shell.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 std::vector<std::string> builtin_str = {
         "mcd",
@@ -41,7 +48,7 @@ bool execute(std::vector<std::string> argv) {
     std::vector<const char *> args_for_execvp;
 
     if (argv.empty()) {
-        return true;
+        return EXIT_SUCCESS;
     }
 
     for (size_t i = 0; i < builtin_str.size(); i++) {
@@ -56,6 +63,7 @@ bool execute(std::vector<std::string> argv) {
     }
 
     args_for_execvp.push_back(nullptr);
+
     pid = fork();
 
     if (pid == 0) {
@@ -63,7 +71,7 @@ bool execute(std::vector<std::string> argv) {
         if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
             std::cerr << "error while execvp: " << argv[0] << std::endl;
         }
-        exit(EXIT_FAILURE);
+        exit(EXIT_SUCCESS);
     } else if (pid < 0) {
         // Error forking
         std::cerr << "error while fork" << std::endl;
@@ -73,19 +81,20 @@ bool execute(std::vector<std::string> argv) {
             waitpid(pid, &status, WUNTRACED);
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
-    return true;
+    return EXIT_SUCCESS;
 }
 
 std::string read_line() {
     std::string line;
-    getline(std::cin, line);
+    std::string prompt = std::filesystem::current_path().string() + " $ ";
+    line = readline(prompt.c_str());
     if (line.empty()) {
         if (std::cin.eof()) {
             exit(EXIT_SUCCESS);
         }
         std::cerr << "error while reading line" << std::endl;
         exit(EXIT_FAILURE);
-    }
+    } else add_history(line.c_str());
     return line;
 }
 
@@ -113,7 +122,6 @@ void loop() {
     int status;
     do {
         std::vector<std::string> arguments_for_execv;
-        std::cout << std::filesystem::current_path().c_str() << " $ ";
         line = read_line();
         strip(line);
         tmp = split_line(line);
@@ -122,7 +130,7 @@ void loop() {
             arguments_for_execv.push_back(parameter);
         }
         status = execute(arguments_for_execv);
-    } while (status);
+    } while (status == EXIT_SUCCESS);
 }
 
 int mcd(std::vector<std::string> &argv) {
@@ -133,12 +141,12 @@ int mcd(std::vector<std::string> &argv) {
             std::cout << "error while mcd" << std::endl;
         }
     }
-    return 1;
+    return EXIT_SUCCESS;
 }
 
 int mexit(std::vector<std::string> &argv) {
     if (argv.empty()) {
-        exit(EXIT_SUCCESS);
+        exit(EXIT_FAILURE);
     } else if (argv.size() > 2) {
         std::cerr << "mexit: too many arguments" << std::endl;
     }
@@ -147,7 +155,7 @@ int mexit(std::vector<std::string> &argv) {
 
 int mpwd([[maybe_unused]] std::vector<std::string> &argv) {
     std::cout << std::filesystem::current_path().c_str() << std::endl;
-    return 1;
+    return EXIT_SUCCESS;
 }
 
 int mecho(std::vector<std::string> &argv) {
@@ -157,10 +165,10 @@ int mecho(std::vector<std::string> &argv) {
         }
     }
     std::cout << std::endl;
-    return 1;
+    return EXIT_SUCCESS;
 }
 
 int mexport(std::vector<std::string> &argv) {
     // TODO: realize this func!
-    return 1;
+    return EXIT_SUCCESS;
 }

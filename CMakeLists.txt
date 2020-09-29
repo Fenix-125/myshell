@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Options
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." OFF)
-option(ENABLE_SANITIZERS "Use sanitizers to detect errors." OFF)
+option(ENABLE_SANITIZERS "Use sanitizers to detect errors." ON)
 option(ENABLE_CONAN "Use Conan as a package manager." OFF)
 
 ## PVS Studio
@@ -35,7 +35,9 @@ install(EXPORT mycat DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 # Add external packages
 find_package(Boost 1.71.0 COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
+include_directories(${readline_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} Boost::program_options)
+target_link_libraries(${PROJECT_NAME} readline)
 
 # Sanitizers configuration
 if (ENABLE_SANITIZERS)
