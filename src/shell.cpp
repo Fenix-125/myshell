@@ -32,7 +32,8 @@ std::vector<std::string> builtin_str = {
         "mexit",
         "mpwd",
         "mecho",
-        "mexport"
+        "mexport",
+        "merrno"
 };
 
 int (*builtin_commands[])(std::vector<std::string> &) = {
@@ -40,7 +41,8 @@ int (*builtin_commands[])(std::vector<std::string> &) = {
         &mexit,
         &mpwd,
         &mecho,
-        &mexport
+        &mexport,
+        &merrno
 };
 
 bool execute(std::vector<std::string> argv) {
@@ -137,7 +139,7 @@ void loop() {
         status = execute(arguments_for_execv);
     } while (status == EXIT_SUCCESS);
     write_history(".myshell_history");
-//    exit(EXIT_SUCCESS);
+    exit(status);
 }
 
 int mcd(std::vector<std::string> &argv) {
@@ -153,14 +155,23 @@ int mcd(std::vector<std::string> &argv) {
 
 int mexit(std::vector<std::string> &argv) {
     if (argv.empty()) {
+        std::cerr << "mexit: no arguments, unexpected error" << std::endl;
         exit(EXIT_FAILURE);
     } else if (argv.size() > 2) {
         std::cerr << "mexit: too many arguments" << std::endl;
+        return EXIT_FAILURE;
     }
-    exit(std::stoi(argv[1]));
+    return (std::stoi(argv[1]));
 }
 
-int mpwd([[maybe_unused]] std::vector<std::string> &argv) {
+int mpwd(std::vector<std::string> &argv) {
+    if (argv.empty()) {
+        std::cerr << "mpwd: no arguments, unexpected error" << std::endl;
+        exit(EXIT_FAILURE);
+    } else if (argv.size() > 1) {
+        std::cerr << "mpwd: too many arguments" << std::endl;
+        return EXIT_FAILURE;
+    }
     std::cout << std::filesystem::current_path().c_str() << std::endl;
     return EXIT_SUCCESS;
 }
@@ -173,6 +184,17 @@ int mecho(std::vector<std::string> &argv) {
     }
     std::cout << std::endl;
     return EXIT_SUCCESS;
+}
+
+int merrno(std::vector<std::string> &argv) {
+    if (argv.empty()) {
+        std::cerr << "merrno: no arguments, unexpected error" << std::endl;
+        exit(EXIT_FAILURE);
+    } else if (argv.size() > 1) {
+        std::cerr << "merrno: too many arguments" << std::endl;
+        return EXIT_FAILURE;
+    }
+    return errno;
 }
 
 int mexport(std::vector<std::string> &argv) {

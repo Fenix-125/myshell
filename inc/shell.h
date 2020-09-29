@@ -28,5 +28,7 @@ int mecho(std::vector<std::string> &argv);
 
 int mexport(std::vector<std::string> &argv);
 
+int merrno(std::vector<std::string> &argv);
+
 #endif //LAB3_MYSHELL_SHELL_H
 
