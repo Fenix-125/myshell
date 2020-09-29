@@ -71,7 +71,7 @@ bool execute(std::vector<std::string> argv) {
         if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
             std::cerr << "error while execvp: " << argv[0] << std::endl;
         }
-        exit(EXIT_SUCCESS);
+        exit(EXIT_FAILURE);
     } else if (pid < 0) {
         // Error forking
         std::cerr << "error while fork" << std::endl;
