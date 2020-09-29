@@ -27,6 +27,7 @@
 #include <readline/history.h>
 
 std::vector<std::string> builtin_str = {
+        // TODO: vector of functions
         "mcd",
         "mexit",
         "mpwd",
@@ -119,7 +120,11 @@ std::vector<std::string> split_line(std::string &line) {
 void loop() {
     std::string line;
     std::vector<std::string> tmp;
+//    std::atexit([]() { write_history(".myshell_history"); });
     int status;
+    if (std::filesystem::exists(".myshell_history")) {
+        read_history(".myshell_history");
+    }
     do {
         std::vector<std::string> arguments_for_execv;
         line = read_line();
@@ -131,6 +136,8 @@ void loop() {
         }
         status = execute(arguments_for_execv);
     } while (status == EXIT_SUCCESS);
+    write_history(".myshell_history");
+//    exit(EXIT_SUCCESS);
 }
 
 int mcd(std::vector<std::string> &argv) {
