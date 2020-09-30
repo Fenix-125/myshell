@@ -26,37 +26,27 @@
 
 #include "shell.h"
 
-std::vector<std::string> builtin_str = {
-        // TODO: vector of functions
-        "mcd",
-        "mexit",
-        "mpwd",
-        "mecho",
-        "mexport",
-        "merrno"
-};
-
-int (*builtin_commands[])(std::vector<std::string> &) = {
-        &mcd,
-        &mexit,
-        &mpwd,
-        &mecho,
-        &mexport,
-        &merrno
-};
-
 bool execute(std::vector<std::string> argv) {
     pid_t pid;
     int status;
     std::vector<const char *> args_for_execvp;
 
+    std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
+            {"mcd",     mcd},
+            {"mexit",   mexit},
+            {"mpwd",    mpwd},
+            {"mecho",   mecho},
+            {"mexport", mexport},
+            {"merrno",  merrno},
+    };
+
     if (argv.empty()) {
         return EXIT_SUCCESS;
     }
 
-    for (size_t i = 0; i < builtin_str.size(); i++) {
-        if (argv[0] == builtin_str[i]) {
-            return (*builtin_commands[i])(argv);
+    for (auto &command:inner_commands) {
+        if (command.first == argv[0]) {
+            return command.second(argv);
         }
     }
 
