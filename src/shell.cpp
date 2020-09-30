@@ -9,9 +9,9 @@
 // TODO: GLOB's
 // TODO: columns parsing
 // TODO: add ./bin to PATH
-// TODO: mexport
 // TODO: scripts .msh files
 // TODO: add merrno
+// TODO: add options parsing for builtin commands
 
 #include <unistd.h>
 #include <filesystem>
@@ -45,10 +45,13 @@ int (*builtin_commands[])(std::vector<std::string> &) = {
         &merrno
 };
 
-bool execute(std::vector<std::string> argv) {
+//typedef std::pair<std::string, std::string> var_def;
+//std::unordered_map<std::string, std::string> local_var_map{};
+std::unordered_map<std::string, std::string> global_var_map{};
+
+bool execute(std::vector<std::string> &&argv) {
     pid_t pid;
     int status;
-    std::vector<const char *> args_for_execvp;
 
     if (argv.empty()) {
         return EXIT_SUCCESS;
@@ -60,12 +63,12 @@ bool execute(std::vector<std::string> argv) {
         }
     }
 
+    std::vector<const char *> args_for_execvp;
     args_for_execvp.reserve(argv.size());
-    for (const auto &el:argv) {
-        args_for_execvp.push_back(el.c_str());
+    for (const auto &el : argv) {
+        args_for_execvp.emplace_back(el.c_str());
     }
-
-    args_for_execvp.push_back(nullptr);
+    args_for_execvp.emplace_back(nullptr);
 
     pid = fork();
 
@@ -122,21 +125,22 @@ std::vector<std::string> split_line(std::string &line) {
 void loop() {
     std::string line;
     std::vector<std::string> tmp;
+    std::vector<std::string> arguments_for_execv;
 //    std::atexit([]() { write_history(".myshell_history"); });
     int status;
     if (std::filesystem::exists(".myshell_history")) {
         read_history(".myshell_history");
     }
     do {
-        std::vector<std::string> arguments_for_execv;
         line = read_line();
         strip(line);
         tmp = split_line(line);
         arguments_for_execv.reserve(tmp.size() + 1);
-        for (const auto &parameter:tmp) {
-            arguments_for_execv.push_back(parameter);
+        for (auto &parameter : tmp) {
+            arguments_for_execv.emplace_back(std::move(parameter));
         }
-        status = execute(arguments_for_execv);
+        status = execute(std::move(arguments_for_execv));
+        arguments_for_execv.clear();
     } while (status == EXIT_SUCCESS);
     write_history(".myshell_history");
     exit(status);
@@ -198,6 +202,18 @@ int merrno(std::vector<std::string> &argv) {
 }
 
 int mexport(std::vector<std::string> &argv) {
-    // TODO: realize this func!
+    if (argv.empty()) {
+        std::cerr << "mexport: no arguments, unexpected error" << std::endl;
+        exit(EXIT_FAILURE);
+    } else if (argv.size() != 2) {
+        std::cerr << "mexport: 1 argument expected" << std::endl;
+        return EXIT_FAILURE;
+    }
+    constexpr char token{'='};
+    std::string &expression = argv[1];
+    const auto pos = expression.find(token);
+    const std::string name = expression.substr(0, pos);
+    expression.erase(0, pos + 1);
+    global_var_map[name] = expression;
     return EXIT_SUCCESS;
 }
