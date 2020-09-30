@@ -25,7 +25,7 @@ include_directories(inc)
 add_subdirectory(mycat)
 
 # Project source compilation
-add_executable(${PROJECT_NAME} src/main.cpp src/shell.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/shell.cpp src/options_parser.cpp)
 
 install(EXPORT mycat DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 #add_library(operations SHARED src/operations.cpp inc/operations/operations.hpp)
