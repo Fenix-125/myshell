@@ -120,7 +120,7 @@ void loop() {
     int status = EXIT_SUCCESS;
     std::string env = getenv("PATH");
     env += ":" + std::filesystem::current_path().string() + "/bin/";
-    setenv("PATH", env.c_str(), 0);
+    setenv("PATH", env.c_str(), 1);
     std::cout << env << std::endl;
     if (std::filesystem::exists(".myshell_history")) {
         std::cout << "history found" << std::endl;
