@@ -7,7 +7,7 @@
 
 // TODO: expand vars
 // TODO: GLOB's
-// TODO: columns parsing
+// TODO: quotes parsing
 // TODO: add ./bin to PATH
 // TODO: mexport
 // TODO: scripts .msh files
@@ -31,7 +31,7 @@ bool execute(std::vector<std::string> argv) {
     int status;
     std::vector<const char *> args_for_execvp;
 
-    std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
+    std::map<std::string, std::function<int(std::vector<std::string> const &)>> inner_commands = {
             {"mcd",     mcd},
             {"mexit",   mexit},
             {"mpwd",    mpwd},
@@ -64,7 +64,7 @@ bool execute(std::vector<std::string> argv) {
         if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
             std::cerr << "error while execvp: " << argv[0] << std::endl;
         }
-        exit(EXIT_FAILURE);
+        return (EXIT_FAILURE);
     } else if (pid < 0) {
         // Error forking
         std::cerr << "error while fork" << std::endl;
@@ -85,8 +85,6 @@ std::string read_line() {
         if (std::cin.eof()) {
             exit(EXIT_SUCCESS);
         }
-        std::cerr << "error while reading line" << std::endl;
-        exit(EXIT_FAILURE);
     } else add_history(line.c_str());
     return line;
 }
@@ -112,15 +110,16 @@ std::vector<std::string> split_line(std::string &line) {
 void loop() {
     std::string line;
     std::vector<std::string> tmp;
-//    std::atexit([]() { write_history(".myshell_history"); });
     int status;
     if (std::filesystem::exists(".myshell_history")) {
+        std::cout << "history found" << std::endl;
         read_history(".myshell_history");
     }
     do {
         std::vector<std::string> arguments_for_execv;
         line = read_line();
         strip(line);
+        if (line.empty()) continue;
         tmp = split_line(line);
         arguments_for_execv.reserve(tmp.size() + 1);
         for (const auto &parameter:tmp) {
@@ -132,7 +131,7 @@ void loop() {
     exit(status);
 }
 
-int mcd(std::vector<std::string> &argv) {
+int mcd(std::vector<std::string> const &argv) {
     if (argv.size() == 1) {
         chdir(getenv("HOME"));
     } else {
@@ -143,21 +142,22 @@ int mcd(std::vector<std::string> &argv) {
     return EXIT_SUCCESS;
 }
 
-int mexit(std::vector<std::string> &argv) {
+int mexit(std::vector<std::string> const &argv) {
     if (argv.empty()) {
         std::cerr << "mexit: no arguments, unexpected error" << std::endl;
-        exit(EXIT_FAILURE);
+        return (EXIT_FAILURE);
     } else if (argv.size() > 2) {
         std::cerr << "mexit: too many arguments" << std::endl;
         return EXIT_FAILURE;
     }
-    return (std::stoi(argv[1]));
+    write_history(".myshell_history");
+    exit(std::stoi(argv[1]));
 }
 
-int mpwd(std::vector<std::string> &argv) {
+int mpwd(std::vector<std::string> const &argv) {
     if (argv.empty()) {
         std::cerr << "mpwd: no arguments, unexpected error" << std::endl;
-        exit(EXIT_FAILURE);
+        return (EXIT_FAILURE);
     } else if (argv.size() > 1) {
         std::cerr << "mpwd: too many arguments" << std::endl;
         return EXIT_FAILURE;
@@ -166,7 +166,7 @@ int mpwd(std::vector<std::string> &argv) {
     return EXIT_SUCCESS;
 }
 
-int mecho(std::vector<std::string> &argv) {
+int mecho(std::vector<std::string> const &argv) {
     for (size_t i = 1; i < argv.size(); ++i) {
         if (!argv[i].empty()) {
             std::cout << argv[i] << " ";
@@ -176,10 +176,10 @@ int mecho(std::vector<std::string> &argv) {
     return EXIT_SUCCESS;
 }
 
-int merrno(std::vector<std::string> &argv) {
+int merrno(std::vector<std::string> const &argv) {
     if (argv.empty()) {
         std::cerr << "merrno: no arguments, unexpected error" << std::endl;
-        exit(EXIT_FAILURE);
+        return (EXIT_FAILURE);
     } else if (argv.size() > 1) {
         std::cerr << "merrno: too many arguments" << std::endl;
         return EXIT_FAILURE;
@@ -187,7 +187,7 @@ int merrno(std::vector<std::string> &argv) {
     return errno;
 }
 
-int mexport(std::vector<std::string> &argv) {
+int mexport(std::vector<std::string> const &argv) {
     // TODO: realize this func!
     return EXIT_SUCCESS;
 }
