@@ -5,10 +5,7 @@
 // Created by myralllka on 9/22/20.
 //
 
-// TODO: expand vars
 // TODO: GLOB's
-// TODO: quotes parsing
-// TODO: add ./bin to PATH
 // TODO: add merrno
 // TODO: add options parsing for builtin commands
 
@@ -96,6 +93,40 @@ std::string read_line() {
     return line;
 }
 
+static inline auto iterall_effect_pos(const std::string &line, const std::string &token, size_t offset = 0) {
+    std::string::size_type effected_word_start = line.find(token, offset);
+    if (effected_word_start == std::string::npos)
+        return std::pair<std::string::size_type, std::string::size_type>{-1, -1};
+    else
+        effected_word_start += token.size();
+    const std::string::size_type effected_end =
+            std::find_if(line.begin() + effected_word_start, line.end(),
+                         [](const char &ch) {
+                             return std::isspace(ch);
+                         }) - line.begin();
+    return std::pair<std::string::size_type, std::string::size_type>{effected_word_start, effected_end};
+}
+
+static inline std::string &expand_vars(std::string &line) {
+    std::stringstream s{};
+    std::string name;
+    const std::string token = "$";
+    size_t offset = 0u;
+    auto effect_pos = iterall_effect_pos(line, token);
+    while (effect_pos.first != std::string::npos) {
+        s << line.substr(offset, (effect_pos.first - token.size()) - offset);
+        name = line.substr(effect_pos.first, effect_pos.second - effect_pos.first);
+        if (global_var_map.find(name) != global_var_map.end()) {
+            s << global_var_map[name];
+        }
+        offset = effect_pos.second;
+        effect_pos = iterall_effect_pos(line, token, offset); // add offset
+    }
+    s << line.substr(offset);
+    line = s.str();
+    return line;
+}
+
 static inline void strip(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
         return !std::isspace(ch);
@@ -103,7 +134,8 @@ static inline void strip(std::string &s) {
     s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
         return !std::isspace(ch);
     }).base(), s.end());
-    if (size_t index = s.find('#') != std::string::npos) {
+    size_t index = s.find('#');
+    if (index != std::string::npos) {
         s.erase(s.begin() + index + 1, s.end());
     }
 }
@@ -131,13 +163,13 @@ void loop() {
         line = read_line();
         strip(line);
         if (line.empty()) continue;
+        expand_vars(line);
         tmp = split_line(line);
         arguments_for_execv.reserve(tmp.size() + 1);
         for (auto &parameter : tmp) {
             arguments_for_execv.emplace_back(std::move(parameter));
         }
         status = execute(std::move(arguments_for_execv));
-        arguments_for_execv.clear();
     } while (status == EXIT_SUCCESS);
     matexit();
 }
@@ -204,7 +236,7 @@ int mexport(std::vector<std::string> const &argv) {
         matexit();
     } else if (argv.size() != 2) {
         std::cerr << "mexport: 1 argument expected" << std::endl;
-        return EXIT_FAILURE;
+        return EXIT_SUCCESS;
     }
     constexpr char token{'='};
     std::string expression = argv[1];
