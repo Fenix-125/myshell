@@ -16,8 +16,6 @@ std::vector<std::string> split_line(std::string &line);
 
 bool execute(std::vector<std::string> argv);
 
-bool launch(std::vector<std::string> argv);
-
 int mcd(std::vector<std::string> &argv);
 
 int mexit(std::vector<std::string> &argv);
