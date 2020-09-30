@@ -4,6 +4,8 @@ set(PROJECT_NAME myshell)
 project(${PROJECT_NAME} CXX)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Debug)
+
 
 # Options
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." OFF)

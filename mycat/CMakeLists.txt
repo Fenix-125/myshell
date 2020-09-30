@@ -21,7 +21,7 @@ include_directories(inc/file_interface)
 #file(GLOB_RECURSE SRC "inc/*.h" "src/*.cpp")
 
 # Project source compilation
-add_executable(${PROJECT_NAME} src/main.cpp src/file_interface/file_interface.cpp src/options_parser.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/file_interface/file_interface.cpp src/options_parser_mycat.cpp)
 
 # Add external packages
 find_package(Boost 1.71.0 COMPONENTS program_options REQUIRED)

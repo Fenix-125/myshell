@@ -9,7 +9,6 @@
 // TODO: GLOB's
 // TODO: quotes parsing
 // TODO: add ./bin to PATH
-// TODO: scripts .msh files
 // TODO: add merrno
 // TODO: add options parsing for builtin commands
 
@@ -27,6 +26,12 @@
 #include "shell.h"
 
 std::unordered_map<std::string, std::string> global_var_map{};
+
+void matexit() {
+    write_history(".myshell_history");
+    fclose(rl_instream);
+    exit(EXIT_FAILURE);
+}
 
 bool execute(std::vector<std::string> &&argv) {
     pid_t pid;
@@ -64,8 +69,8 @@ bool execute(std::vector<std::string> &&argv) {
         // Child process
         if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
             std::cerr << "error while execvp: " << argv[0] << std::endl;
+            return EXIT_FAILURE;
         }
-        return (EXIT_FAILURE);
     } else if (pid < 0) {
         // Error forking
         std::cerr << "error while fork" << std::endl;
@@ -79,14 +84,15 @@ bool execute(std::vector<std::string> &&argv) {
 }
 
 std::string read_line() {
-    std::string line;
+    char *line;
     std::string prompt = std::filesystem::current_path().string() + " $ ";
-    line = readline(prompt.c_str());
-    if (line.empty()) {
-        if (std::cin.eof()) {
-            exit(EXIT_SUCCESS);
-        }
-    } else add_history(line.c_str());
+    if (fileno(rl_instream) == 0) {
+        line = readline(prompt.c_str());
+        if (strlen(line) > 0)
+            add_history(line);
+    } else line = readline("");
+    if (line == nullptr)
+        matexit();
     return line;
 }
 
@@ -111,13 +117,17 @@ std::vector<std::string> split_line(std::string &line) {
 void loop() {
     std::string line;
     std::vector<std::string> tmp;
-    std::vector<std::string> arguments_for_execv;
-    int status;
+    int status = EXIT_SUCCESS;
+    std::string env = getenv("PATH");
+    env += ":" + std::filesystem::current_path().string() + "/bin/";
+    setenv("PATH", env.c_str(), 0);
+    std::cout << env << std::endl;
     if (std::filesystem::exists(".myshell_history")) {
         std::cout << "history found" << std::endl;
         read_history(".myshell_history");
     }
     do {
+        std::vector<std::string> arguments_for_execv;
         line = read_line();
         strip(line);
         if (line.empty()) continue;
@@ -129,8 +139,7 @@ void loop() {
         status = execute(std::move(arguments_for_execv));
         arguments_for_execv.clear();
     } while (status == EXIT_SUCCESS);
-    write_history(".myshell_history");
-    exit(status);
+    matexit();
 }
 
 int mcd(std::vector<std::string> const &argv) {
@@ -152,8 +161,8 @@ int mexit(std::vector<std::string> const &argv) {
         std::cerr << "mexit: too many arguments" << std::endl;
         return EXIT_FAILURE;
     }
-    write_history(".myshell_history");
-    exit(std::stoi(argv[1]));
+    matexit();
+    return EXIT_SUCCESS;
 }
 
 int mpwd(std::vector<std::string> const &argv) {
@@ -192,7 +201,7 @@ int merrno(std::vector<std::string> const &argv) {
 int mexport(std::vector<std::string> const &argv) {
     if (argv.empty()) {
         std::cerr << "mexport: no arguments, unexpected error" << std::endl;
-        exit(EXIT_FAILURE);
+        matexit();
     } else if (argv.size() != 2) {
         std::cerr << "mexport: 1 argument expected" << std::endl;
         return EXIT_FAILURE;
