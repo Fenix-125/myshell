@@ -6,7 +6,6 @@
 //
 
 // TODO: GLOB's
-// TODO: add merrno
 // TODO: add options parsing for builtin commands
 
 #include <unistd.h>
@@ -19,8 +18,11 @@
 #include <cctype>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <merrno.h>
 
 #include "shell.h"
+
+__thread int merrno_val = 0;
 
 std::unordered_map<std::string, std::string> global_var_map{};
 
@@ -71,12 +73,14 @@ bool execute(std::vector<std::string> &&argv) {
     } else if (pid < 0) {
         // Error forking
         std::cerr << "error while fork" << std::endl;
+        merrno_val = ECHILD;
     } else {
         // Parent process
         do {
             waitpid(pid, &status, WUNTRACED);
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
+    merrno_val = 0;
     return EXIT_SUCCESS;
 }
 
@@ -180,6 +184,9 @@ int mcd(std::vector<std::string> const &argv) {
     } else {
         if (chdir(argv[1].c_str()) != 0) {
             std::cout << "error while mcd" << std::endl;
+            merrno_val = EINVAL;
+        } else {
+            merrno_val = 0;
         }
     }
     return EXIT_SUCCESS;
@@ -188,24 +195,30 @@ int mcd(std::vector<std::string> const &argv) {
 int mexit(std::vector<std::string> const &argv) {
     if (argv.empty()) {
         std::cerr << "mexit: no arguments, unexpected error" << std::endl;
+        merrno_val = EINVAL;
         return (EXIT_FAILURE);
     } else if (argv.size() > 2) {
         std::cerr << "mexit: too many arguments" << std::endl;
+        merrno_val = E2BIG;
         return EXIT_FAILURE;
     }
     matexit();
+    merrno_val = 0;
     return EXIT_SUCCESS;
 }
 
 int mpwd(std::vector<std::string> const &argv) {
     if (argv.empty()) {
         std::cerr << "mpwd: no arguments, unexpected error" << std::endl;
+        merrno_val = EINVAL;
         return (EXIT_FAILURE);
     } else if (argv.size() > 1) {
         std::cerr << "mpwd: too many arguments" << std::endl;
+        merrno_val = E2BIG;
         return EXIT_FAILURE;
     }
     std::cout << std::filesystem::current_path().c_str() << std::endl;
+    merrno_val = 0;
     return EXIT_SUCCESS;
 }
 
@@ -216,26 +229,34 @@ int mecho(std::vector<std::string> const &argv) {
         }
     }
     std::cout << std::endl;
+    merrno_val = 0;
     return EXIT_SUCCESS;
 }
 
 int merrno(std::vector<std::string> const &argv) {
     if (argv.empty()) {
+        merrno_val = EINVAL;
         std::cerr << "merrno: no arguments, unexpected error" << std::endl;
         return (EXIT_FAILURE);
     } else if (argv.size() > 1) {
         std::cerr << "merrno: too many arguments" << std::endl;
+        merrno_val = E2BIG;
         return EXIT_FAILURE;
     }
-    return errno;
+    std::cout << merrno_val << std::endl;
+    merrno_val = 0;
+    return EXIT_SUCCESS;
 }
 
 int mexport(std::vector<std::string> const &argv) {
     if (argv.empty()) {
         std::cerr << "mexport: no arguments, unexpected error" << std::endl;
+        merrno_val = EINVAL;
         matexit();
+        return EXIT_SUCCESS;
     } else if (argv.size() != 2) {
         std::cerr << "mexport: 1 argument expected" << std::endl;
+        merrno_val = E2BIG;
         return EXIT_SUCCESS;
     }
     constexpr char token{'='};
@@ -244,5 +265,6 @@ int mexport(std::vector<std::string> const &argv) {
     const std::string name = expression.substr(0, pos);
     expression.erase(0, pos + 1);
     global_var_map[name] = expression;
+    merrno_val = 0;
     return EXIT_SUCCESS;
 }
