@@ -6,7 +6,6 @@
 //
 
 // TODO: GLOB's
-// TODO: add options parsing for builtin commands
 
 #include <unistd.h>
 #include <filesystem>
@@ -19,7 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <merrno.h>
-
+#include <boost/program_options.hpp>
 #include "shell.h"
 
 __thread int merrno_val = 0;
@@ -36,7 +35,7 @@ bool execute(std::vector<std::string> &&argv) {
     pid_t pid;
     int status;
 
-    std::map<std::string, std::function<int(std::vector<std::string> const &)>> inner_commands = {
+    std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
             {"mcd",     mcd},
             {"mexit",   mexit},
             {"mpwd",    mpwd},
@@ -203,7 +202,48 @@ int no_arguments(std::string const &program_name) {
     return (EXIT_FAILURE);
 }
 
-int mcd(std::vector<std::string> const &argv) {
+namespace po = boost::program_options;
+
+struct parsed_args {
+    bool help;
+    std::vector<std::string> args;
+};
+
+static parsed_args pars(const std::vector<std::string> &argv, const std::string &help_msg) {
+    std::vector<std::string> vector;
+    bool help;
+
+    po::options_description visible("Supported options");
+    visible.add_options()
+            ("help,h", po::value<bool>(&help)->zero_tokens(), "Print this help message.");
+
+    po::options_description hidden("Hidden options");
+    hidden.add_options()
+            ("args", po::value<std::vector<std::string>>(&vector)->composing());
+
+    po::positional_options_description p;
+    p.add("args", -1);
+
+    po::options_description all("All options");
+    all.add(visible).add(hidden);
+
+    po::variables_map vm;
+    try {
+        po::store(po::command_line_parser(argv).options(all).positional(p).run(), vm);
+    } catch (boost::wrapexcept<po::unknown_option> &_e) {}
+    po::notify(vm);
+    if (vm.count("help")) {
+        std::cout << help_msg << "\n" << visible << std::endl;
+    }
+    return parsed_args{static_cast<bool>(vm.count("help")), vector};
+}
+
+int mcd(std::vector<std::string> &argv) {
+    const auto parsed = pars(argv, "mcd help");
+    if (parsed.help) {
+        merrno_val = 0;
+        return EXIT_SUCCESS;
+    }
     if (argv.empty())
         return no_arguments("mexit");
     if (argv.size() == 1) {
@@ -219,7 +259,13 @@ int mcd(std::vector<std::string> const &argv) {
     return EXIT_SUCCESS;
 }
 
-int mexit(std::vector<std::string> const &argv) {
+int mexit(std::vector<std::string> &argv) {
+    const auto parsed = pars(argv, "mexit help");
+    if (parsed.help) {
+        merrno_val = 0;
+        return EXIT_SUCCESS;
+    }
+    argv = parsed.args;
     if (argv.empty()) {
         return no_arguments("mexit");
     } else if (argv.size() > 2) {
@@ -230,7 +276,13 @@ int mexit(std::vector<std::string> const &argv) {
     return EXIT_SUCCESS;
 }
 
-int mpwd(std::vector<std::string> const &argv) {
+int mpwd(std::vector<std::string> &argv) {
+    const auto parsed = pars(argv, "mpwd help");
+    if (parsed.help) {
+        merrno_val = 0;
+        return EXIT_SUCCESS;
+    }
+    argv = parsed.args;
     if (argv.empty()) {
         return no_arguments("mpwd");
     } else if (argv.size() > 1) {
@@ -241,7 +293,13 @@ int mpwd(std::vector<std::string> const &argv) {
     return EXIT_SUCCESS;
 }
 
-int mecho(std::vector<std::string> const &argv) {
+int mecho(std::vector<std::string> &argv) {
+    const auto parsed = pars(argv, "mecho help");
+    if (parsed.help) {
+        merrno_val = 0;
+        return EXIT_SUCCESS;
+    }
+    argv = parsed.args;
     for (size_t i = 1; i < argv.size(); ++i) {
         if (!argv[i].empty()) {
             std::cout << argv[i] << " ";
@@ -252,7 +310,7 @@ int mecho(std::vector<std::string> const &argv) {
     return EXIT_SUCCESS;
 }
 
-int myexec(std::vector<std::string> const &argv) {
+int myexec(std::vector<std::string> &argv) {
     if (argv.empty() || argv.size() == 1) {
         return no_arguments(".");
     } else if (argv.size() > 2) {
@@ -274,7 +332,13 @@ int myexec(std::vector<std::string> const &argv) {
     return EXIT_SUCCESS;
 }
 
-int merrno(std::vector<std::string> const &argv) {
+int merrno(std::vector<std::string> &argv) {
+    const auto parsed = pars(argv, "merrno help");
+    if (parsed.help) {
+        merrno_val = 0;
+        return EXIT_SUCCESS;
+    }
+    argv = parsed.args;
     if (argv.empty()) {
         return no_arguments("merrno");
     } else if (argv.size() > 1) {
@@ -285,7 +349,13 @@ int merrno(std::vector<std::string> const &argv) {
     return EXIT_SUCCESS;
 }
 
-int mexport(std::vector<std::string> const &argv) {
+int mexport(std::vector<std::string> &argv) {
+    const auto parsed = pars(argv, "mexport help");
+    if (parsed.help) {
+        merrno_val = 0;
+        return EXIT_SUCCESS;
+    }
+    argv = parsed.args;
     if (argv.empty()) {
         return no_arguments("mexport");
     } else if (argv.size() > 2) {
