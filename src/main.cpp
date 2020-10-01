@@ -21,15 +21,18 @@ int main(int argc, char **argv) {
         auto filename = conf.get_filenames()[0];
         if (std::filesystem::path(filename).extension() == ".msh") {
             rl_instream = fopen(filename.data(), "r");
+            rl_outstream = rl_instream;
             if (rl_instream == nullptr) {
                 std::cerr << "File \"" << filename.data() << "\" does not exists. Stopping program" << std::endl;
-                return -1;
+                return EXIT_FAILURE;
             }
         } else {
             std::cerr << "Bad script extension (.msh required)" << std::endl;
             return EXIT_FAILURE;
         }
-    } else rl_instream = stdin;
+    } else {
+        rl_instream = stdin;
+    }
     loop();
     return EXIT_SUCCESS;
 }

@@ -68,6 +68,9 @@ bool execute(std::vector<std::string> &&argv) {
     if (pid == 0) {
         // Child process
         if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
+            if (std::filesystem::path(args_for_execvp[0]).extension() == ".msh") {
+                myexec(argv);
+            }
             std::cerr << "error while execvp: " << argv[0] << std::endl;
             return EXIT_FAILURE;
         }
@@ -85,7 +88,7 @@ bool execute(std::vector<std::string> &&argv) {
     return EXIT_SUCCESS;
 }
 
-std::string read_line() {
+std::string read_line(bool internal_func) {
     char *line;
     std::string prompt = std::filesystem::current_path().string() + " $ ";
     if (fileno(rl_instream) == 0) {
@@ -93,8 +96,12 @@ std::string read_line() {
         if (line[0] != '\0')
             add_history(line);
     } else line = readline("");
-    if (line == nullptr)
-        matexit();
+    if (line == nullptr) {
+        if (internal_func)
+            return "\0";
+        else
+            matexit();
+    }
     return line;
 }
 
@@ -151,13 +158,16 @@ std::vector<std::string> split_line(std::string &line) {
     return result;
 }
 
-void launch_loop() {
+void launch_loop(bool internal_func) {
     std::string line;
     int status = EXIT_SUCCESS;
     std::vector<std::string> tmp;
     do {
         std::vector<std::string> arguments_for_execv;
-        line = read_line();
+        line = read_line(internal_func);
+        if (line == "\0") {
+            return;
+        }
         strip(line);
         if (line.empty()) continue;
         expand_vars(line);
@@ -174,12 +184,10 @@ void loop() {
     std::string env = getenv("PATH");
     env += ":" + std::filesystem::current_path().string() + "/bin/";
     setenv("PATH", env.c_str(), 1);
-    std::cout << env << std::endl;
     if (std::filesystem::exists(".myshell_history")) {
-        std::cout << "history found" << std::endl;
         read_history(".myshell_history");
     }
-    launch_loop();
+    launch_loop(false);
     matexit();
 }
 
@@ -253,15 +261,16 @@ int myexec(std::vector<std::string> const &argv) {
     auto filename = argv[1];
     if (std::filesystem::path(filename).extension() == ".msh") {
         rl_instream = fopen(filename.data(), "r");
+        rl_outstream = rl_instream;
         if (rl_instream == nullptr) {
             std::cerr << "File \"" << filename.data() << "\" does not exists. Stopping program" << std::endl;
         } else
-            launch_loop();
+            launch_loop(true);
     } else {
         std::cerr << "Bad script extension (.msh required)" << std::endl;
     }
     rl_instream = stdin;
-    std::cout << "here" << std::endl;
+    rl_outstream = stdout;
     return EXIT_SUCCESS;
 }
 

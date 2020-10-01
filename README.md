@@ -13,5 +13,18 @@
 The rest prerequisites (such as development libraries) can be found in the [packages file](./apt_packages.txt) in the form of the apt package manager package names.
 
 ## Installing
-
+```
+bash compile.sh
+```
 ## Usage
+```
+./myshell
+```
+## Internal commands:
+- mcd
+- mpwd
+- mexit
+- merrno
+- mecho
+- mexport
+
