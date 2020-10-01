@@ -10,7 +10,7 @@
 
 void loop();
 
-std::string read_line();
+std::string read_line(bool internal_func);
 
 std::vector<std::string> split_line(std::string &line);
 
