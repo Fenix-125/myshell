@@ -284,7 +284,7 @@ option(PVS_STUDIO_DEBUG OFF "Add debug info")
 # LOG path                      path to report (default: ${CMAKE_CURRENT_BINARY_DIR}/PVS-Studio.log)
 # FORMAT format                 format of report
 # MODE mode                     analyzers/levels filter (default: GA:1,2)
-# HIDE_HELP                     do not dump_map_to_files help message
+# HIDE_HELP                     do not print help message
 #
 # Analyzer options:
 # PLATFORM name                 linux32/linux64 (default: linux64)

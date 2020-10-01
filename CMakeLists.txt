@@ -4,8 +4,6 @@ set(PROJECT_NAME myshell)
 project(${PROJECT_NAME} CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE Debug)
-
 
 # Options
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." OFF)
@@ -13,7 +11,7 @@ option(ENABLE_SANITIZERS "Use sanitizers to detect errors." ON)
 option(ENABLE_CONAN "Use Conan as a package manager." OFF)
 
 ## PVS Studio
-include(PVS-Studio.cmake)
+include(cmake/PVS-Studio.cmake)
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include fixed CMake configuration
