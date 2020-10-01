@@ -14,6 +14,8 @@ The rest prerequisites (such as development libraries) can be found in the [pack
 
 ## Installing
 ```
+git clone https://github.com/Fenix-125/myshell.git
+cd myshell
 bash compile.sh
 ```
 ## Usage
@@ -27,4 +29,14 @@ bash compile.sh
 - merrno
 - mecho
 - mexport
-
+## Supported features:
+### Obligatory
+- interpreter promt shows current path
+- internal (list above) and external commands (git, ls, whoami etc)
+- ./bin is added to the PATH, so any program from that folder can be launched
+- !!!!!! GLOB\`s supporting
+- commands history (between launches) and command line editting
+- comments
+- scripts supporting (but without forks and loops)
+### Additional
+-
