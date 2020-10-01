@@ -1,39 +1,35 @@
-#include <iostream>
-#include <boost/program_options.hpp>
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-#include "operations/operations.hpp"
+#include <iostream>
+#include <filesystem>
+#include <cstdio>
+#include "shell.h"
+#include "options_parser.h"
+#include <readline/readline.h>
+
+command_line_options parse_arguments(int argc, char **argv);
 
 int main(int argc, char **argv) {
-    int variable_a, variable_b;
-
-    namespace po = boost::program_options;
-
-    po::options_description visible("Supported options");
-    visible.add_options()
-            ("help,h", "Print this help message.");
-
-    po::options_description hidden("Hidden options");
-    hidden.add_options()
-            ("a", po::value<int>(&variable_a)->default_value(0), "Variable A.")
-            ("b", po::value<int>(&variable_b)->default_value(0), "Variable B.");
-
-    po::positional_options_description p;
-    p.add("a", 1);
-    p.add("b", 1);
-
-    po::options_description all("All options");
-    all.add(visible).add(hidden);
-
-    po::variables_map vm;
-    po::store(po::command_line_parser(argc, argv).options(all).positional(p).run(), vm);
-    po::notify(vm);
-
-    if (vm.count("help")) {
-        std::cout << "Usage:\n  add [a] [b]\n" << visible << std::endl;
-        return EXIT_SUCCESS;
+    command_line_options conf;
+    conf.parse(argc, argv);
+    if (conf.get_filenames().size() > 1) {
+        std::cerr << "Too many arguments" << std::endl;
+        return EXIT_FAILURE;
     }
-
-    int result = operations::add(variable_a, variable_b);
-    std::cout << result << std::endl;
+    if (not conf.get_filenames().empty()) {
+        auto filename = conf.get_filenames()[0];
+        if (std::filesystem::path(filename).extension() == ".msh") {
+            rl_instream = fopen(filename.data(), "r");
+            if (rl_instream == nullptr) {
+                std::cerr << "File \"" << filename.data() << "\" does not exists. Stopping program" << std::endl;
+                return -1;
+            }
+        } else {
+            std::cerr << "Bad script extension (.msh required)" << std::endl;
+            return EXIT_FAILURE;
+        }
+    } else rl_instream = stdin;
+    loop();
     return EXIT_SUCCESS;
 }
