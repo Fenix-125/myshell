@@ -28,5 +28,7 @@ int mexport(std::vector<std::string> const &argv);
 
 int merrno(std::vector<std::string> const &argv);
 
+int myexec(std::vector<std::string> const &argv);
+
 #endif //LAB3_MYSHELL_SHELL_H
 

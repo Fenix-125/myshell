@@ -43,6 +43,7 @@ bool execute(std::vector<std::string> &&argv) {
             {"mecho",   mecho},
             {"mexport", mexport},
             {"merrno",  merrno},
+            {".",       myexec}
     };
 
     if (argv.empty()) {
@@ -89,7 +90,7 @@ std::string read_line() {
     std::string prompt = std::filesystem::current_path().string() + " $ ";
     if (fileno(rl_instream) == 0) {
         line = readline(prompt.c_str());
-        if (strlen(line) > 0)
+        if (line[0] != '\0')
             add_history(line);
     } else line = readline("");
     if (line == nullptr)
@@ -132,16 +133,16 @@ static inline std::string &expand_vars(std::string &line) {
 }
 
 static inline void strip(std::string &s) {
+    size_t index = s.find('#');
+    if (index != std::string::npos) {
+        s.erase(s.begin() + index, s.end());
+    }
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
         return !std::isspace(ch);
     }));
     s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
         return !std::isspace(ch);
     }).base(), s.end());
-    size_t index = s.find('#');
-    if (index != std::string::npos) {
-        s.erase(s.begin() + index + 1, s.end());
-    }
 }
 
 std::vector<std::string> split_line(std::string &line) {
@@ -150,18 +151,10 @@ std::vector<std::string> split_line(std::string &line) {
     return result;
 }
 
-void loop() {
+void launch_loop() {
     std::string line;
-    std::vector<std::string> tmp;
     int status = EXIT_SUCCESS;
-    std::string env = getenv("PATH");
-    env += ":" + std::filesystem::current_path().string() + "/bin/";
-    setenv("PATH", env.c_str(), 1);
-    std::cout << env << std::endl;
-    if (std::filesystem::exists(".myshell_history")) {
-        std::cout << "history found" << std::endl;
-        read_history(".myshell_history");
-    }
+    std::vector<std::string> tmp;
     do {
         std::vector<std::string> arguments_for_execv;
         line = read_line();
@@ -175,10 +168,36 @@ void loop() {
         }
         status = execute(std::move(arguments_for_execv));
     } while (status == EXIT_SUCCESS);
+}
+
+void loop() {
+    std::string env = getenv("PATH");
+    env += ":" + std::filesystem::current_path().string() + "/bin/";
+    setenv("PATH", env.c_str(), 1);
+    std::cout << env << std::endl;
+    if (std::filesystem::exists(".myshell_history")) {
+        std::cout << "history found" << std::endl;
+        read_history(".myshell_history");
+    }
+    launch_loop();
     matexit();
 }
 
+int too_many_arguments(std::string const &program_name) {
+    std::cerr << program_name.data() << ": too many arguments" << std::endl;
+    merrno_val = E2BIG;
+    return EXIT_FAILURE;
+}
+
+int no_arguments(std::string const &program_name) {
+    std::cerr << program_name.data() << "no arguments, unexpected error" << std::endl;
+    merrno_val = EINVAL;
+    return (EXIT_FAILURE);
+}
+
 int mcd(std::vector<std::string> const &argv) {
+    if (argv.empty())
+        return no_arguments("mexit");
     if (argv.size() == 1) {
         chdir(getenv("HOME"));
     } else {
@@ -194,13 +213,9 @@ int mcd(std::vector<std::string> const &argv) {
 
 int mexit(std::vector<std::string> const &argv) {
     if (argv.empty()) {
-        std::cerr << "mexit: no arguments, unexpected error" << std::endl;
-        merrno_val = EINVAL;
-        return (EXIT_FAILURE);
+        return no_arguments("mexit");
     } else if (argv.size() > 2) {
-        std::cerr << "mexit: too many arguments" << std::endl;
-        merrno_val = E2BIG;
-        return EXIT_FAILURE;
+        return too_many_arguments("mexit");
     }
     matexit();
     merrno_val = 0;
@@ -209,13 +224,9 @@ int mexit(std::vector<std::string> const &argv) {
 
 int mpwd(std::vector<std::string> const &argv) {
     if (argv.empty()) {
-        std::cerr << "mpwd: no arguments, unexpected error" << std::endl;
-        merrno_val = EINVAL;
-        return (EXIT_FAILURE);
+        return no_arguments("mpwd");
     } else if (argv.size() > 1) {
-        std::cerr << "mpwd: too many arguments" << std::endl;
-        merrno_val = E2BIG;
-        return EXIT_FAILURE;
+        return too_many_arguments("mpwd");
     }
     std::cout << std::filesystem::current_path().c_str() << std::endl;
     merrno_val = 0;
@@ -233,15 +244,32 @@ int mecho(std::vector<std::string> const &argv) {
     return EXIT_SUCCESS;
 }
 
+int myexec(std::vector<std::string> const &argv) {
+    if (argv.empty() || argv.size() == 1) {
+        return no_arguments(".");
+    } else if (argv.size() > 2) {
+        return too_many_arguments(".");
+    }
+    auto filename = argv[1];
+    if (std::filesystem::path(filename).extension() == ".msh") {
+        rl_instream = fopen(filename.data(), "r");
+        if (rl_instream == nullptr) {
+            std::cerr << "File \"" << filename.data() << "\" does not exists. Stopping program" << std::endl;
+        } else
+            launch_loop();
+    } else {
+        std::cerr << "Bad script extension (.msh required)" << std::endl;
+    }
+    rl_instream = stdin;
+    std::cout << "here" << std::endl;
+    return EXIT_SUCCESS;
+}
+
 int merrno(std::vector<std::string> const &argv) {
     if (argv.empty()) {
-        merrno_val = EINVAL;
-        std::cerr << "merrno: no arguments, unexpected error" << std::endl;
-        return (EXIT_FAILURE);
+        return no_arguments("merrno");
     } else if (argv.size() > 1) {
-        std::cerr << "merrno: too many arguments" << std::endl;
-        merrno_val = E2BIG;
-        return EXIT_FAILURE;
+        return too_many_arguments("merrno");
     }
     std::cout << merrno_val << std::endl;
     merrno_val = 0;
@@ -250,14 +278,9 @@ int merrno(std::vector<std::string> const &argv) {
 
 int mexport(std::vector<std::string> const &argv) {
     if (argv.empty()) {
-        std::cerr << "mexport: no arguments, unexpected error" << std::endl;
-        merrno_val = EINVAL;
-        matexit();
-        return EXIT_SUCCESS;
-    } else if (argv.size() != 2) {
-        std::cerr << "mexport: 1 argument expected" << std::endl;
-        merrno_val = E2BIG;
-        return EXIT_SUCCESS;
+        return no_arguments("mexport");
+    } else if (argv.size() > 2) {
+        return too_many_arguments("mexport");
     }
     constexpr char token{'='};
     std::string expression = argv[1];
