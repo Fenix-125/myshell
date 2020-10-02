@@ -5,8 +5,6 @@
 // Created by myralllka on 9/22/20.
 //
 
-// TODO: GLOB's
-
 #include <unistd.h>
 #include <filesystem>
 #include <boost/algorithm/string.hpp>
@@ -17,10 +15,10 @@
 #include <cctype>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <merrno.h>
+#include <merrno.h> // extern merrno_val
 #include <boost/program_options.hpp>
 #include "shell.h"
-
+#include <glob_posix.h>
 __thread int merrno_val = 0;
 
 std::unordered_map<std::string, std::string> global_var_map{};
@@ -77,6 +75,7 @@ bool execute(std::vector<std::string> &&argv) {
         // Error forking
         std::cerr << "error while fork" << std::endl;
         merrno_val = ECHILD;
+        return EXIT_SUCCESS;
     } else {
         // Parent process
         do {
@@ -157,6 +156,25 @@ std::vector<std::string> split_line(std::string &line) {
     return result;
 }
 
+static inline std::vector<std::string> expand_globs(std::vector<std::string> &&args) {
+    bool not_used = true;
+    std::vector<std::string> res{};
+    res.reserve(args.size());
+    for (auto &el : args) {
+        glob_wrapper::glob_parser glob{el};
+        while (glob) {
+            res.emplace_back(glob.get_file_name());
+            glob.next();
+            not_used = false;
+        }
+        if (not_used) {
+            res.emplace_back(std::move(el));
+        }
+        not_used = true;
+    }
+    return res;
+}
+
 void launch_loop(bool internal_func) {
     std::string line;
     int status = EXIT_SUCCESS;
@@ -164,13 +182,14 @@ void launch_loop(bool internal_func) {
     do {
         std::vector<std::string> arguments_for_execv;
         line = read_line(internal_func);
-        if (line == "\0") {
+        if (line.empty()) {
             return;
         }
         strip(line);
         if (line.empty()) continue;
         expand_vars(line);
         tmp = split_line(line);
+        tmp = expand_globs(std::move(tmp));
         arguments_for_execv.reserve(tmp.size() + 1);
         for (auto &parameter : tmp) {
             arguments_for_execv.emplace_back(std::move(parameter));
@@ -272,7 +291,6 @@ int mexit(std::vector<std::string> &argv) {
         return too_many_arguments("mexit");
     }
     matexit();
-    merrno_val = 0;
     return EXIT_SUCCESS;
 }
 
