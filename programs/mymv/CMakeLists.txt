@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
-set(PROJECT_NAME myshell)
+set(PROJECT_NAME mycat)
+
 project(${PROJECT_NAME} CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -10,34 +11,25 @@ option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." OFF)
 option(ENABLE_SANITIZERS "Use sanitizers to detect errors." OFF)
 option(ENABLE_CONAN "Use Conan as a package manager." OFF)
 
-## PVS Studio
-#include(cmake/PVS-Studio.cmake)
-#SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 # Include fixed CMake configuration
 include(cmake/config.cmake)
 
-# Include headers
+## include Headers
 include_directories(inc)
+include_directories(inc/exceptions)
+include_directories(inc/file_interface)
 #file(GLOB_RECURSE SRC "inc/*.h" "src/*.cpp")
 
-### Add mycat
-add_subdirectory(programs/mycat)
-
 # Project source compilation
-add_executable(${PROJECT_NAME} src/main.cpp src/shell.cpp src/options_parser.cpp src/glob_posix.cpp)
-
-install(EXPORT mycat DESTINATION ${PROJECT_SOURCE_DIR}/bin)
-#add_library(operations SHARED src/operations.cpp inc/operations/operations.hpp)
-#add_executable(add src/main.cpp)
-#target_link_libraries(add operations)
+add_executable(${PROJECT_NAME} src/main.cpp src/file_interface/file_interface.cpp src/options_parser_mycat.cpp)
 
 # Add external packages
 find_package(Boost 1.71.0 COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
-include_directories(${readline_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} Boost::program_options)
-target_link_libraries(${PROJECT_NAME} readline)
+message(${CMAKE_INSTALL_PREFIX})
+install (TARGETS mycat EXPORT mycat RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+export(EXPORT mycat FILE "${CMAKE_CURRENT_BINARY_DIR}/../mycatTargets.cmake")
 
 # Sanitizers configuration
 if (ENABLE_SANITIZERS)
@@ -51,12 +43,3 @@ if (ENABLE_SANITIZERS)
     # CMake targets to which apply sanitizers
     add_sanitizers(operations ${PROJECT_NAME})
 endif ()
-
-#####################################
-# create own target for library
-#pvs_studio_add_target(TARGET ${PROJECT_NAME}.analyze ALL
-#        ANALYZE ${PROJECT_NAME}
-#        OUTPUT FORMAT errorfile
-#        MODE GA:1,2,3 OP:1,2,3 GA:1,2,3 OP:1,2,3 64:1,2,3 CS:1,2,3 MISRA:1,2,3
-#        LOG target_${PROJECT_NAME}.err)
-##################################%###

@@ -9,8 +9,6 @@ mkdir -p bin build
   cd build
   cmake -G"Unix Makefiles" ..
   make
-  cp ./myshell ../bin
-  mv ./myshell ../
-  mv ./programs/mycat/mycat ../bin
+  mv ./mycat ../bin/
 )
-#rm -r build
+rm -r build
