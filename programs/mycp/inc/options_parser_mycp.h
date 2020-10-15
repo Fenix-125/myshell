@@ -22,8 +22,9 @@ public:
 
 private:
     std::vector<std::string> filenames;
-    bool f{};
-    bool R{};
+
+    bool f = false;
+    bool R = false;
 
     void init_opt_description();
 

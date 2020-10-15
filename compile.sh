@@ -12,5 +12,6 @@ mkdir -p bin build
   cp ./myshell ../bin
   mv ./myshell ../
   mv ./programs/mycat/mycat ../bin
+  mv ./programs/mycp/mycp ../bin
 )
 #rm -r build

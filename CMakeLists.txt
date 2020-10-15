@@ -6,7 +6,7 @@ project(${PROJECT_NAME} CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 # Options
-option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." OFF)
+option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." ON)
 option(ENABLE_SANITIZERS "Use sanitizers to detect errors." OFF)
 option(ENABLE_CONAN "Use Conan as a package manager." OFF)
 
@@ -23,11 +23,13 @@ include_directories(inc)
 
 ### Add mycat
 add_subdirectory(programs/mycat)
+add_subdirectory(programs/mycp)
 
 # Project source compilation
 add_executable(${PROJECT_NAME} src/main.cpp src/shell.cpp src/options_parser.cpp src/glob_posix.cpp)
 
 install(EXPORT mycat DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+install(EXPORT mycp DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 #add_library(operations SHARED src/operations.cpp inc/operations/operations.hpp)
 #add_executable(add src/main.cpp)
 #target_link_libraries(add operations)

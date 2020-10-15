@@ -25,8 +25,8 @@ void command_line_options::parse(int ac, char **av) {
             std::cout << opt_conf << "\n";
             exit(EXIT_SUCCESS);
         }
-        f = var_map.count("f");
-        R = var_map.count("R");
+        f = var_map.count("force");
+        R = var_map.count("recursive");
         notify(var_map);
     } catch (std::exception &E) {
         std::cerr << E.what() << std::endl;

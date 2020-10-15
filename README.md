@@ -29,6 +29,9 @@ bash compile.sh
 - merrno
 - mecho
 - mexport
+## Outer commands:
+- mycp
+- mycat
 ## Supported features:
 ### Obligatory
 - interpreter prompt shows current path

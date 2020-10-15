@@ -1,9 +1,10 @@
-# Lab 2: MyCat
+# additional lab: mycp
 
 ## Team
 
- - [Mykola Morhunenko](https://github.com/Myralllka)
-
+ - [Morhunenko Mykola](https://github.com/Myralllka)
+ - [Yuriy Pasichnyk](https://github.com/Fenix-125)
+ 
 ## Prerequisites
 
  - **C++ compiler** - needs to support **C++17** standard
@@ -13,25 +14,8 @@ The rest prerequisites (such as development libraries) can be found in the [pack
 
 ## Installing
 
-1. Clone the project.
-    ```bash
-   
-    ```
-2. Install required libraries. On Ubuntu:
-   ```bash
-   ```
-3. Build.
-    ```bash
-    cmake -G"Unix Makefiles" -Bbuild
-    cmake --build build
-    ```
-
-## Usage
-
 ```bash
-add [a] [b]
+./compile.sh
 ```
 
-If less than two numbers provided, zeroes are used instead. If more - an error occurs.
-
-Help flags `-h`/`--help` support is available.
+## Usage

@@ -12,7 +12,7 @@ option(ENABLE_SANITIZERS "Use sanitizers to detect errors." OFF)
 option(ENABLE_CONAN "Use Conan as a package manager." OFF)
 
 # Include fixed CMake configuration
-include(cmake/config.cmake)
+include(../../cmake/config.cmake)
 
 ## include Headers
 include_directories(inc)
@@ -28,8 +28,8 @@ find_package(Boost 1.71.0 COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} Boost::program_options)
 message(${CMAKE_INSTALL_PREFIX})
-install (TARGETS mycat EXPORT mycat RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin)
-export(EXPORT mycat FILE "${CMAKE_CURRENT_BINARY_DIR}/../mycatTargets.cmake")
+install (TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME} RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+export(EXPORT ${PROJECT_NAME} FILE "${CMAKE_CURRENT_BINARY_DIR}/../${PROJECT_NAME}Targets.cmake")
 
 # Sanitizers configuration
 if (ENABLE_SANITIZERS)
@@ -41,5 +41,5 @@ if (ENABLE_SANITIZERS)
     find_package(Sanitizers)
 
     # CMake targets to which apply sanitizers
-    add_sanitizers(operations ${PROJECT_NAME})
+    add_sanitizers(${PROJECT_NAME})
 endif ()
