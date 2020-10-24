@@ -66,6 +66,13 @@ bool execute(std::vector<std::string> &&argv, bool bg = false) {
 
     if (pid == 0) {
         // Child process
+        // TODO: redirection here
+        if (bg) {
+            std::cout << "bg \n";
+            close(0);
+            close(1);
+            close(2);
+        }
         if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
             if (std::filesystem::path(args_for_execvp[0]).extension() == ".msh") {
                 myexec(argv);
@@ -81,8 +88,6 @@ bool execute(std::vector<std::string> &&argv, bool bg = false) {
     } else {
         // Parent process
         if (bg) {
-            std::cout << "bg \n";
-            std::cin.ignore();
             signal(SIGCHLD, SIG_IGN);
         } else {
             do {
@@ -216,7 +221,7 @@ void launch_loop(bool internal_func) {
             arguments_for_execv.emplace_back(std::move(parameter));
         }
         status = execute(std::move(arguments_for_execv), bg);
-        bg = true;
+        bg = false;
     } while (status == EXIT_SUCCESS);
 }
 
