@@ -188,13 +188,15 @@ static inline std::vector<std::string> expand_globs(std::vector<std::string> &&a
     return res;
 }
 
-static inline void expand_redirections([[maybe_unused]] std::string &line) {
+bool expand_redirections([[maybe_unused]] std::string &line) {
 //    size_t index_rewrite = line.find('>');
 //    size_t index_attach = line.find(">>");
 //    size_t index_input = line.find('<');
 //    if (index_rewrite != std::string::npos) {
 //        if(line.at(index_rewrite - 1) == "&" or )
 //    }
+
+    return false;
 }
 
 void launch_loop(bool internal_func) {
