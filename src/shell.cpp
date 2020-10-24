@@ -15,10 +15,12 @@
 #include <cctype>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <merrno.h> // extern merrno_val
 #include <boost/program_options.hpp>
+
+#include "glob_posix.h"
 #include "shell.h"
-#include <glob_posix.h>
+#include "merrno.h" // extern merrno_val
+
 __thread int merrno_val = 0;
 
 std::unordered_map<std::string, std::string> global_var_map{};
@@ -29,7 +31,7 @@ void matexit() {
     exit(EXIT_FAILURE);
 }
 
-bool execute(std::vector<std::string> &&argv) {
+bool execute(std::vector<std::string> &&argv, bool bg = false) {
     pid_t pid;
     int status;
 
@@ -78,9 +80,15 @@ bool execute(std::vector<std::string> &&argv) {
         return EXIT_SUCCESS;
     } else {
         // Parent process
-        do {
-            waitpid(pid, &status, WUNTRACED);
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        if (bg) {
+            std::cout << "bg \n";
+            std::cin.ignore();
+            signal(SIGCHLD, SIG_IGN);
+        } else {
+            do {
+                waitpid(pid, &status, WUNTRACED);
+            } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        }
     }
     merrno_val = 0;
     return EXIT_SUCCESS;
@@ -175,26 +183,40 @@ static inline std::vector<std::string> expand_globs(std::vector<std::string> &&a
     return res;
 }
 
+static inline void expand_redirections([[maybe_unused]] std::string &line) {
+//    size_t index_rewrite = line.find('>');
+//    size_t index_attach = line.find(">>");
+//    size_t index_input = line.find('<');
+//    if (index_rewrite != std::string::npos) {
+//        if(line.at(index_rewrite - 1) == "&" or )
+//    }
+}
+
 void launch_loop(bool internal_func) {
     std::string line;
     int status = EXIT_SUCCESS;
     std::vector<std::string> tmp;
+    bool bg = false;
     do {
         std::vector<std::string> arguments_for_execv;
         line = read_line(internal_func);
-        if (line.empty()) {
-            return;
-        }
+        if (line.empty()) return;
         strip(line);
         if (line.empty()) continue;
-        expand_vars(line);
+        line = expand_vars(line);
+        expand_redirections(line);
         tmp = split_line(line);
+        if (tmp.back() == "&") {
+            tmp.pop_back();
+            bg = true;
+        }
         tmp = expand_globs(std::move(tmp));
         arguments_for_execv.reserve(tmp.size() + 1);
-        for (auto &parameter : tmp) {
+        for (auto &&parameter : tmp) {
             arguments_for_execv.emplace_back(std::move(parameter));
         }
-        status = execute(std::move(arguments_for_execv));
+        status = execute(std::move(arguments_for_execv), bg);
+        bg = true;
     } while (status == EXIT_SUCCESS);
 }
 

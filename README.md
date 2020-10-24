@@ -41,6 +41,10 @@ bash compile.sh
 - commands history (between launches) and command line editing
 - comments
 - scripts supporting (but without forks and loops)
+- pipes
+- input/output redirects
+- subshell commands
+- forage ground execution
 
 ### Additional
 

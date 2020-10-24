@@ -10,16 +10,11 @@ option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." ON)
 option(ENABLE_SANITIZERS "Use sanitizers to detect errors." OFF)
 option(ENABLE_CONAN "Use Conan as a package manager." OFF)
 
-## PVS Studio
-#include(cmake/PVS-Studio.cmake)
-#SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 # Include fixed CMake configuration
 include(cmake/config.cmake)
 
 # Include headers
 include_directories(inc)
-#file(GLOB_RECURSE SRC "inc/*.h" "src/*.cpp")
 
 ### Add mycat
 add_subdirectory(programs/mycat)
@@ -30,9 +25,6 @@ add_executable(${PROJECT_NAME} src/main.cpp src/shell.cpp src/options_parser.cpp
 
 install(EXPORT mycat DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(EXPORT mycp DESTINATION ${PROJECT_SOURCE_DIR}/bin)
-#add_library(operations SHARED src/operations.cpp inc/operations/operations.hpp)
-#add_executable(add src/main.cpp)
-#target_link_libraries(add operations)
 
 # Add external packages
 find_package(Boost 1.71.0 COMPONENTS program_options REQUIRED)
@@ -56,6 +48,8 @@ endif ()
 
 #####################################
 # create own target for library
+#include(cmake/PVS-Studio.cmake)
+#SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #pvs_studio_add_target(TARGET ${PROJECT_NAME}.analyze ALL
 #        ANALYZE ${PROJECT_NAME}
 #        OUTPUT FORMAT errorfile
