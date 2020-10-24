@@ -29,6 +29,9 @@ bash compile.sh
 - merrno
 - mecho
 - mexport
+## Outer commands:
+- mycp
+- mycat
 ## Supported features:
 ### Obligatory
 - interpreter prompt shows current path
@@ -38,6 +41,7 @@ bash compile.sh
 - commands history (between launches) and command line editing
 - comments
 - scripts supporting (but without forks and loops)
+- forage ground execution (only if there is space before `&`)
 
 ### Additional
 
