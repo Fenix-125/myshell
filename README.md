@@ -42,6 +42,7 @@ bash compile.sh
 - comments
 - scripts supporting (but without forks and loops)
 - forage ground execution (only if there is space before `&`)
+- redirecting of stdin, stdout, stderr
 
 ### Additional
 

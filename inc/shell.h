@@ -8,13 +8,22 @@
 #include <map>
 #include <vector>
 
+struct redirections {
+    bool redirect_in = false;
+    bool redirect_out = false;
+    bool redirect_err = false;
+    std::string fin{};
+    std::string fout{};
+    std::string ferr{};
+};
+
 void loop();
 
 std::string read_line(bool internal_func);
 
 std::vector<std::string> split_line(std::string &line);
 
-bool execute(std::vector<std::string> &&argv, bool bg);
+bool execute(std::vector<std::string> &&argv, const redirections& red, bool bg, bool re);
 
 int mcd(std::vector<std::string> &argv);
 
