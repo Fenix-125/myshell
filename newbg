@@ -1,0 +1,15 @@
+apt_packages.txt
+bin
+build
+cmake
+cmake-build-debug
+CMakeLists.txt
+compile.sh
+conanfile.txt
+inc
+myshell
+newbg
+programs
+README.md
+src
+test_script.msh

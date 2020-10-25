@@ -16,6 +16,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <boost/program_options.hpp>
+#include <fcntl.h>
 
 #include "glob_posix.h"
 #include "shell.h"
@@ -31,7 +32,7 @@ void matexit() {
     exit(EXIT_FAILURE);
 }
 
-bool execute(std::vector<std::string> &&argv, bool bg = false) {
+bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, bool re) {
     pid_t pid;
     int status;
 
@@ -65,10 +66,34 @@ bool execute(std::vector<std::string> &&argv, bool bg = false) {
     pid = fork();
 
     if (pid == 0) {
-        // Child process
-        // TODO: redirection here
-        if (bg) {
-            std::cout << "bg \n";
+        if (re) {
+            if (red.redirect_in) {
+                int fdin = open(red.fin.c_str(), O_RDONLY);
+                if (dup2(fdin, 0) == -1) {
+                    std::cerr << "Error while redirecting from " << red.fin << std::endl;
+                    merrno_val = errno;
+                    matexit();
+                }
+            }
+            if (red.redirect_out) {
+                int fdout = open(red.fout.c_str(), O_WRONLY | O_CREAT,
+                                 S_IROTH | S_IRGRP | S_IWGRP | S_IWUSR | S_IRUSR | S_IRWXU);
+                if (dup2(fdout, 1) == -1) {
+                    std::cerr << "Error while redirecting to " << red.fout << std::endl;
+                    merrno_val = errno;
+                    matexit();
+                }
+            }
+            if (red.redirect_err) {
+                int fderr = open(red.ferr.c_str(), O_WRONLY | O_CREAT,
+                                 S_IROTH | S_IRGRP | S_IWGRP | S_IWUSR | S_IRUSR | S_IRWXU);
+                if (dup2(fderr, 1) == -1) {
+                    std::cerr << "Error while redirecting to " << red.ferr << std::endl;
+                    merrno_val = errno;
+                    matexit();
+                }
+            }
+        } else if (bg) {
             close(0);
             close(1);
             close(2);
@@ -188,51 +213,76 @@ static inline std::vector<std::string> expand_globs(std::vector<std::string> &&a
     return res;
 }
 
-bool expand_redirections([[maybe_unused]] std::string &line) {
-//    size_t index_rewrite = line.find('>');
-//    size_t index_attach = line.find(">>");
-//    size_t index_input = line.find('<');
-//    if (index_rewrite != std::string::npos) {
-//        if(line.at(index_rewrite - 1) == "&" or )
-//    }
-
-    return false;
+bool expand_redirections(std::vector<std::string> &line, redirections &red) {
+    if (line.size() <= 2) return false;
+    if (line[line.size() - 2] == ">") {
+        red.redirect_out = true;
+        red.fout = line.back();
+    } else if (line.size() <= 4 and line[line.size() - 3] == ">" and line.back() == "2>&1") {
+        red.redirect_out = true;
+        red.redirect_err = true;
+        red.fout = line[line.size() - 2];
+        red.ferr = line[line.size() - 2];
+        line.pop_back();
+    } else if (line[line.size() - 2] == "2>") {
+        red.redirect_err = true;
+        red.ferr = line.back();
+    } else if (line[line.size() - 2] == "<") {
+        red.redirect_in = true;
+        red.fin = line.back();
+    } else if (line[line.size() - 2] == "&>") {
+        red.redirect_out = true;
+        red.redirect_err = true;
+        red.ferr = line.back();
+        red.fout = line.back();
+    } else {
+        return false;
+    }
+    line.pop_back();
+    line.pop_back();
+    return true;
 }
 
 void launch_loop(bool internal_func) {
     std::string line;
     int status = EXIT_SUCCESS;
     std::vector<std::string> tmp;
-    bool bg = false;
+    bool bg = false, re;
     do {
+        redirections rd;
         std::vector<std::string> arguments_for_execv;
         line = read_line(internal_func);
         if (line.empty()) return;
         strip(line);
         if (line.empty()) continue;
         line = expand_vars(line);
-        expand_redirections(line);
         tmp = split_line(line);
         if (tmp.back() == "&") {
             tmp.pop_back();
             bg = true;
         }
+        re = expand_redirections(tmp, rd);
         tmp = expand_globs(std::move(tmp));
         arguments_for_execv.reserve(tmp.size() + 1);
         for (auto &&parameter : tmp) {
             arguments_for_execv.emplace_back(std::move(parameter));
         }
-        status = execute(std::move(arguments_for_execv), bg);
+        status = execute(std::move(arguments_for_execv), rd, bg, re);
         bg = false;
     } while (status == EXIT_SUCCESS);
 }
 
 void loop() {
-    std::string env = getenv("PATH");
-    env += ":" + std::filesystem::current_path().string() + "/bin/";
-    setenv("PATH", env.c_str(), 1);
-    if (std::filesystem::exists(".myshell_history")) {
-        read_history(".myshell_history");
+    auto e = getenv("PATH");
+    if (e == nullptr)
+        std::cerr << "Error ewading PATH!" << std::endl;
+    else {
+        auto env = std::string{e};
+        env += ":" + std::filesystem::current_path().string() + "/bin/";
+        setenv("PATH", env.c_str(), 1);
+        if (std::filesystem::exists(".myshell_history")) {
+            read_history(".myshell_history");
+        }
     }
     launch_loop(false);
     matexit();
@@ -295,7 +345,11 @@ int mcd(std::vector<std::string> &argv) {
     if (argv.empty())
         return no_arguments("mexit");
     if (argv.size() == 1) {
-        chdir(getenv("HOME"));
+        auto tmp = getenv("HOME");
+        if (tmp == nullptr)
+            std::cerr << "Error reading HOME variable!" << std::endl;
+        else
+            chdir(tmp);
     } else {
         if (chdir(argv[1].c_str()) != 0) {
             std::cout << "error while mcd" << std::endl;
