@@ -155,25 +155,6 @@ static inline auto iterall_effect_pos(const std::string &line, const std::string
     return std::pair<std::string::size_type, std::string::size_type>{effected_word_start, effected_end};
 }
 
-static inline std::string &expand_vars(std::string &line) {
-    std::stringstream s{};
-    std::string name;
-    const std::string token = "$";
-    size_t offset = 0u;
-    auto effect_pos = iterall_effect_pos(line, token);
-    while (effect_pos.first != std::string::npos) {
-        s << line.substr(offset, (effect_pos.first - token.size()) - offset);
-        name = line.substr(effect_pos.first, effect_pos.second - effect_pos.first);
-        if (global_var_map.find(name) != global_var_map.end()) {
-            s << global_var_map[name];
-        }
-        offset = effect_pos.second;
-        effect_pos = iterall_effect_pos(line, token, offset); // add offset
-    }
-    s << line.substr(offset);
-    line = s.str();
-    return line;
-}
 
 static inline void strip(std::string &s) {
     size_t index = s.find('#');
@@ -241,6 +222,59 @@ bool expand_redirections(std::vector<std::string> &line, redirections &red) {
     line.pop_back();
     line.pop_back();
     return true;
+}
+
+std::string expand_vars(std::string &line) {
+    std::vector<std::string> tmp;
+    std::stringstream s{};
+    std::stringstream ss;
+    const std::string token = "$";
+    std::string name;
+    size_t offset = 0u;
+    auto effect_pos = iterall_effect_pos(line, token);
+    bool re;
+    int status;
+    while (effect_pos.first != std::string::npos) {
+        s << line.substr(offset, (effect_pos.first - token.size()) - offset);
+        name = line.substr(effect_pos.first, effect_pos.second - effect_pos.first);
+        auto lindex = line.find("(");
+        auto rindex = line.find(")");
+        if (lindex != std::string::npos and rindex != std::string::npos) {
+            auto old_buf = std::cout.rdbuf(ss.rdbuf());
+            auto substr = line.substr(lindex + 1, rindex - lindex - 1);
+            redirections rd;
+            std::vector<std::string> arguments_for_execv;
+            if (substr.empty()) continue;
+            strip(substr);
+            if (substr.empty()) continue;
+            substr = expand_vars(substr);
+            tmp = split_line(substr);
+            re = expand_redirections(tmp, rd);
+            tmp = expand_globs(std::move(tmp));
+            arguments_for_execv.reserve(tmp.size() + 1);
+            for (auto &&parameter : tmp) {
+                arguments_for_execv.emplace_back(std::move(parameter));
+            }
+            status = execute(std::move(arguments_for_execv), rd, false, re);
+
+            if (status != EXIT_SUCCESS) {
+                std::cerr << "myshell: Error while executing subshell." << std::endl;
+                matexit();
+            } else {
+                std::cout.rdbuf(old_buf);
+                std::cout << "Success!" << ss.str() << std::endl;
+            }
+            return "";
+        }
+        if (global_var_map.find(name) != global_var_map.end()) {
+            s << global_var_map[name];
+        }
+        offset = effect_pos.second;
+        effect_pos = iterall_effect_pos(line, token, offset); // add offset
+    }
+    s << line.substr(offset);
+    line = s.str();
+    return line;
 }
 
 void launch_loop(bool internal_func) {
