@@ -32,9 +32,12 @@ void matexit() {
     exit(EXIT_FAILURE);
 }
 
-bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, bool re) {
+bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, bool re,
+             [[maybe_unused]] std::pair<bool, std::string> subs = {}) {
     pid_t pid;
     int status;
+    int fd[2];
+    pipe(fd);
 
     std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
             {"mcd",     mcd},
@@ -45,6 +48,7 @@ bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, 
             {"merrno",  merrno},
             {".",       myexec}
     };
+
 
     if (argv.empty()) {
         return EXIT_SUCCESS;
@@ -66,10 +70,13 @@ bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, 
     pid = fork();
 
     if (pid == 0) {
+        if (subs.first) {
+            dup2(fd[1], STDOUT_FILENO);
+        }
         if (re) {
             if (red.redirect_in) {
                 int fdin = open(red.fin.c_str(), O_RDONLY);
-                if (dup2(fdin, 0) == -1) {
+                if (dup2(fdin, STDIN_FILENO) == -1) {
                     std::cerr << "Error while redirecting from " << red.fin << std::endl;
                     merrno_val = errno;
                     matexit();
@@ -78,7 +85,7 @@ bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, 
             if (red.redirect_out) {
                 int fdout = open(red.fout.c_str(), O_WRONLY | O_CREAT,
                                  S_IROTH | S_IRGRP | S_IWGRP | S_IWUSR | S_IRUSR | S_IRWXU);
-                if (dup2(fdout, 1) == -1) {
+                if (dup2(fdout, STDOUT_FILENO) == -1) {
                     std::cerr << "Error while redirecting to " << red.fout << std::endl;
                     merrno_val = errno;
                     matexit();
@@ -87,7 +94,7 @@ bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, 
             if (red.redirect_err) {
                 int fderr = open(red.ferr.c_str(), O_WRONLY | O_CREAT,
                                  S_IROTH | S_IRGRP | S_IWGRP | S_IWUSR | S_IRUSR | S_IRWXU);
-                if (dup2(fderr, 1) == -1) {
+                if (dup2(fderr, STDERR_FILENO) == -1) {
                     std::cerr << "Error while redirecting to " << red.ferr << std::endl;
                     merrno_val = errno;
                     matexit();
@@ -112,6 +119,14 @@ bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, 
         return EXIT_SUCCESS;
     } else {
         // Parent process
+        if (subs.first) {
+            char buffer[1000];
+            ssize_t size = read(fd[0], buffer, 1000);
+            if ((size > 0) && (size < static_cast<ssize_t>(sizeof(buffer)))) {
+                buffer[size-1] = '\0';
+                global_var_map[subs.second] = buffer;
+            }
+        }
         if (bg) {
             signal(SIGCHLD, SIG_IGN);
         } else {
@@ -120,19 +135,21 @@ bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, 
             } while (!WIFEXITED(status) && !WIFSIGNALED(status));
         }
     }
+
     merrno_val = 0;
     return EXIT_SUCCESS;
 }
 
 std::string read_line(bool internal_func) {
-    char *line;
+    std::string line;
+    line.reserve(1000);
     std::string prompt = std::filesystem::current_path().string() + " $ ";
     if (fileno(rl_instream) == 0) {
         line = readline(prompt.c_str());
         if (line[0] != '\0')
-            add_history(line);
+            add_history(line.data());
     } else line = readline("");
-    if (line == nullptr) {
+    if (line.empty()) {
         if (internal_func)
             return "\0";
         else
@@ -224,48 +241,15 @@ bool expand_redirections(std::vector<std::string> &line, redirections &red) {
     return true;
 }
 
-std::string expand_vars(std::string &line) {
-    std::vector<std::string> tmp;
+static inline std::string &expand_vars(std::string &line) {
     std::stringstream s{};
-    std::stringstream ss;
-    const std::string token = "$";
     std::string name;
+    const std::string token = "$";
     size_t offset = 0u;
     auto effect_pos = iterall_effect_pos(line, token);
-    bool re;
-    int status;
     while (effect_pos.first != std::string::npos) {
         s << line.substr(offset, (effect_pos.first - token.size()) - offset);
         name = line.substr(effect_pos.first, effect_pos.second - effect_pos.first);
-        auto lindex = line.find("(");
-        auto rindex = line.find(")");
-        if (lindex != std::string::npos and rindex != std::string::npos) {
-            auto old_buf = std::cout.rdbuf(ss.rdbuf());
-            auto substr = line.substr(lindex + 1, rindex - lindex - 1);
-            redirections rd;
-            std::vector<std::string> arguments_for_execv;
-            if (substr.empty()) continue;
-            strip(substr);
-            if (substr.empty()) continue;
-            substr = expand_vars(substr);
-            tmp = split_line(substr);
-            re = expand_redirections(tmp, rd);
-            tmp = expand_globs(std::move(tmp));
-            arguments_for_execv.reserve(tmp.size() + 1);
-            for (auto &&parameter : tmp) {
-                arguments_for_execv.emplace_back(std::move(parameter));
-            }
-            status = execute(std::move(arguments_for_execv), rd, false, re);
-
-            if (status != EXIT_SUCCESS) {
-                std::cerr << "myshell: Error while executing subshell." << std::endl;
-                matexit();
-            } else {
-                std::cout.rdbuf(old_buf);
-                std::cout << "Success!" << ss.str() << std::endl;
-            }
-            return "";
-        }
         if (global_var_map.find(name) != global_var_map.end()) {
             s << global_var_map[name];
         }
@@ -275,6 +259,42 @@ std::string expand_vars(std::string &line) {
     s << line.substr(offset);
     line = s.str();
     return line;
+}
+
+bool expand_subshell(std::string &line) {
+    std::vector<std::string> tmp;
+    auto dindex = line.find('$');
+    auto lindex = line.find('(');
+    auto rindex = line.find(')');
+    bool re;
+    int status = EXIT_SUCCESS;
+    if (lindex != std::string::npos and
+        rindex != std::string::npos and
+        dindex != std::string::npos and
+        dindex + 1 == lindex) {
+        std::string name = line.substr(0, lindex - 2);
+        auto substr = line.substr(lindex + 1, rindex - lindex - 1);
+        redirections rd;
+        std::vector<std::string> arguments_for_execv;
+        if (substr.empty()) return EXIT_SUCCESS;
+        strip(substr);
+        if (substr.empty()) return EXIT_SUCCESS;
+        substr = expand_vars(substr);
+        tmp = split_line(substr);
+        re = expand_redirections(tmp, rd);
+        tmp = expand_globs(std::move(tmp));
+        arguments_for_execv.reserve(tmp.size() + 1);
+        for (auto &&parameter : tmp) {
+            arguments_for_execv.emplace_back(std::move(parameter));
+        }
+        status = execute(std::move(arguments_for_execv), rd, false, re, std::pair<bool, std::string>(true, name));
+        if (status != EXIT_SUCCESS) {
+            std::cerr << "myshell: Error while executing subshell." << std::endl;
+            matexit();
+        }
+        return EXIT_SUCCESS;
+    }
+    return EXIT_FAILURE;
 }
 
 void launch_loop(bool internal_func) {
@@ -289,6 +309,10 @@ void launch_loop(bool internal_func) {
         if (line.empty()) return;
         strip(line);
         if (line.empty()) continue;
+        status = expand_subshell(line);
+        if (status == EXIT_SUCCESS) {
+            continue;
+        }
         line = expand_vars(line);
         tmp = split_line(line);
         if (tmp.back() == "&") {
