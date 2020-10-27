@@ -23,7 +23,7 @@ std::string read_line(bool internal_func);
 
 std::vector<std::string> split_line(std::string &line);
 
-bool execute(std::vector<std::string> &&argv, const redirections& red, bool bg, bool re);
+bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, bool re, std::pair<bool, std::string> subs);
 
 int mcd(std::vector<std::string> &argv);
 
