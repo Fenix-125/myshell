@@ -55,11 +55,7 @@ int execute(std::vector<std::string> &&argv,
     if (argv.empty()) {
         return EXIT_SUCCESS;
     }
-    for (auto &command : inner_commands) {
-        if (command.first == argv[0]) {
-            return command.second(argv);
-        }
-    }
+
     std::vector<const char *> args_for_execvp;
     args_for_execvp.reserve(argv.size());
     for (const auto &el : argv) {
@@ -67,11 +63,11 @@ int execute(std::vector<std::string> &&argv,
     }
     args_for_execvp.emplace_back(nullptr);
 
-    if (!pipe_state.in_pipe)
+    if (sub_shell_var.first)
         pid = fork();
 
     if (pid == 0) {
-        if (sub_shell_var.first) {
+        if (sub_shell_var.first) { // TODO: check if no redirect in last pipe
             dup2(subs_pipe_fd[1], STDOUT_FILENO);
         }
         if (pipe_state.re) {
@@ -106,6 +102,12 @@ int execute(std::vector<std::string> &&argv,
             close(STDOUT_FILENO);
             close(STDERR_FILENO);
         }
+        for (auto &command : inner_commands) {
+            if (command.first == argv[0]) {
+                status = command.second(argv);
+                exit(status);
+            }
+        }
         if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
             if (std::filesystem::path(args_for_execvp[0]).extension() == ".msh") {
                 myexec(argv);
@@ -130,7 +132,7 @@ int execute(std::vector<std::string> &&argv,
         }
         if (pipe_state.bg) {
             signal(SIGCHLD, SIG_IGN);
-        } else if (!pipe_state.in_pipe) {
+        } else if (sub_shell_var.first) {
             do {
                 waitpid(pid, &status, WUNTRACED);
             } while (!WIFEXITED(status) && !WIFSIGNALED(status));
@@ -293,7 +295,7 @@ static std::vector<pipe_proc_t> build_pipeline(std::string &&line) {
     std::vector<pipe_proc_t> pipeline{};
     std::vector<std::string> arguments_for_execv;
     pipeline.reserve(pipeline_size);
-    bool bg = false, re;;
+    bool bg = false, re;
     redirections rd;
 
     strip(line);
@@ -357,9 +359,10 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
 
     if (pipeline.empty()) {
         return EXIT_FAILURE;
-    } else if (pipeline.size() == 1) {
-        return execute(std::move(pipeline[0].command), pipeline[0].pipe_state, subs);
     }
+//    else if (pipeline.size() == 1) {
+//        return execute(std::move(pipeline[0].command), pipeline[0].pipe_state, subs);
+//    }
 
     for (auto &pipe_el : pipeline) {
         if (pipe_el.command.empty())
@@ -367,7 +370,7 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
         if ((!pipe_el.pipe_state.first_pipe && pipe_el.pipe_state.red.redirect_in) ||
             (!pipe_el.pipe_state.last_pipe && pipe_el.pipe_state.red.redirect_out)) {
             std::cerr << "Error: bad redirect in pipeline" << std::endl;
-            return EXIT_FAILURE;
+            return EXIT_SUCCESS;
         }
         switch (pipe_el.pipe_state.pid = fork()) {
             case -1:
@@ -394,14 +397,14 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
         status = execute(std::move(pipe_el.command), pipe_el.pipe_state, subs);
         if (in_parent && status != EXIT_SUCCESS) {
             kill_pipeline(pipeline);
-            return EXIT_FAILURE;
+            return EXIT_SUCCESS;
         }
     }
     /* Parent closes unused file descriptors for pipe, and waits for children */
     if (close_all_pipes(pipeline) == EXIT_FAILURE) {
         std::cerr << "Error: while closing pipes in parent" << std::endl;
         kill_pipeline(pipeline); // TODO: review
-        return EXIT_FAILURE;
+        return EXIT_SUCCESS;
     }
     for (auto &pipe_el : pipeline) {
         do {
@@ -409,7 +412,7 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
         if (status == -1) {
             std::cerr << "Error: fail to wait pipeline element with status: " << status << std::endl;
-            return EXIT_FAILURE;
+            return EXIT_SUCCESS;
         }
     }
     return EXIT_SUCCESS;
