@@ -130,13 +130,12 @@ int execute(std::vector<std::string> &&argv,
         }
         if (pipe_state.bg) {
             signal(SIGCHLD, SIG_IGN);
-        } else {
+        } else if (!pipe_state.in_pipe) {
             do {
                 waitpid(pid, &status, WUNTRACED);
             } while (!WIFEXITED(status) && !WIFSIGNALED(status));
         }
     }
-
     merrno_val = 0;
     return EXIT_SUCCESS;
 }
@@ -149,7 +148,8 @@ std::string read_line(bool internal_func) {
         line = readline(prompt.c_str());
         if (line[0] != '\0')
             add_history(line.data());
-    } else line = readline("");
+    } else
+        line = readline("");
     if (line.empty()) { // TODO: comments needed here
         if (internal_func)
             matexit();
@@ -274,6 +274,19 @@ struct pipe_proc_t {
     pipe_state_t pipe_state;
 };
 
+static inline int close_all_pipes(const std::vector<pipe_proc_t> &pipeline) {
+    int exit_status = EXIT_SUCCESS;
+    for (const auto &pipe_el : pipeline) {
+        if (pipe_el.pipe.in > 2)
+            if (close(pipe_el.pipe.in) == -1)
+                exit_status = EXIT_FAILURE;
+        if (pipe_el.pipe.out > 2)
+            if (close(pipe_el.pipe.out) == -1)
+                exit_status = EXIT_FAILURE;
+    }
+    return exit_status;
+}
+
 static std::vector<pipe_proc_t> build_pipeline(std::string &&line) {
     size_t pipeline_size = std::count(line.begin(), line.end(), '|') + 1;
     int tmp_desc[2];
@@ -302,6 +315,8 @@ static std::vector<pipe_proc_t> build_pipeline(std::string &&line) {
     std::vector<std::string> commands{};
     commands.reserve(pipeline_size);
     boost::split(commands, std::move(line), boost::is_any_of("|"));
+    for (auto &command : commands)
+        strip(command);
     arguments_for_execv = split_line(commands[0]);
     re = expand_redirections(arguments_for_execv, rd);
     arguments_for_execv = expand_globs(std::move(arguments_for_execv));
@@ -310,7 +325,9 @@ static std::vector<pipe_proc_t> build_pipeline(std::string &&line) {
     for (size_t i = 1; i < pipeline_size; ++i) {
         if (pipe(tmp_desc) == -1) {
             std::cerr << "Error: while creating pipe!" << std::endl;
-            // TODO: return error to outer
+            merrno_val = EPIPE;
+            close_all_pipes(pipeline);
+            return std::vector<pipe_proc_t>{};
         }
         pipeline[i - 1].pipe.out = tmp_desc[1];
         arguments_for_execv = split_line(commands[i]);
@@ -323,20 +340,6 @@ static std::vector<pipe_proc_t> build_pipeline(std::string &&line) {
     pipeline[pipeline_size - 1].pipe.out = STDOUT_FILENO;
     pipeline[pipeline_size - 1].pipe_state.last_pipe = true;
     return pipeline;
-}
-
-static inline int close_all_pipes(const std::vector<pipe_proc_t> &pipeline) {
-    int exit_status = EXIT_SUCCESS;
-    for (const auto &pipe_el : pipeline) {
-        if (pipe_el.pipe.in > 2)
-            if (close(pipe_el.pipe.in) == -1)
-                exit_status = EXIT_FAILURE;
-        if (pipe_el.pipe.out > 2)
-            if (close(pipe_el.pipe.out) == -1)
-                exit_status = EXIT_FAILURE;
-    }
-    return exit_status;
-    // TODO: add status handling where used
 }
 
 static inline void kill_pipeline(const std::vector<pipe_proc_t> &pipeline) {
@@ -352,7 +355,9 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
     bool in_parent;
     int status;
 
-    if (pipeline.size() == 1) {
+    if (pipeline.empty()) {
+        return EXIT_FAILURE;
+    } else if (pipeline.size() == 1) {
         return execute(std::move(pipeline[0].command), pipeline[0].pipe_state, subs);
     }
 
@@ -366,12 +371,13 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
         }
         switch (pipe_el.pipe_state.pid = fork()) {
             case -1:
-                std::cerr << "fork" << std::endl;
+                std::cerr << "Error: fail to fork" << std::endl;
                 return EXIT_SUCCESS;
             case 0:             /* First child: exec 'ls' to write to pipe */
                 in_parent = false;
                 break;
             default:            /* Parent falls through to create next child */
+                in_parent = true;
                 break;
         }
         if (!in_parent) {
@@ -382,7 +388,7 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
                 if (dup2(pipe_el.pipe.out, STDOUT_FILENO) == -1)
                     std::cerr << "dup2 out" << std::endl;
             if (close_all_pipes(pipeline) == EXIT_FAILURE) {
-                std::cerr << "Error: while closing pipes!" << std::endl;
+                std::cerr << "Error: while closing pipes in child!" << std::endl;
             }
         }
         status = execute(std::move(pipe_el.command), pipe_el.pipe_state, subs);
@@ -393,8 +399,8 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
     }
     /* Parent closes unused file descriptors for pipe, and waits for children */
     if (close_all_pipes(pipeline) == EXIT_FAILURE) {
-        std::cerr << "Error: while closing pipes!" << std::endl;
-        kill_pipeline(pipeline);
+        std::cerr << "Error: while closing pipes in parent" << std::endl;
+        kill_pipeline(pipeline); // TODO: review
         return EXIT_FAILURE;
     }
     for (auto &pipe_el : pipeline) {
@@ -413,7 +419,7 @@ bool expand_subshell(std::string &line) {
     std::vector<std::string> tmp;
     auto dindex = line.find('$');
     auto lindex = line.find('(');
-    auto rindex = line.rfind(')'); // TODO: check if valid fix
+    auto rindex = line.rfind(')');
     int status = EXIT_SUCCESS;
     if (lindex != std::string::npos and
         rindex != std::string::npos and
