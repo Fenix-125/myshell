@@ -44,24 +44,22 @@ void matexit() {
 }
 
 int execute(std::vector<std::string> &&argv,
-            const pipe_state_t &pipe_state = {false, true, true, false, false, redirections{}},
+            const pipe_state_t &pipe_state = {false, true, true, false, false, redirections{}, 0},
             [[maybe_unused]] const std::pair<bool, std::string> &sub_shell_var = {}) {
-    pid_t pid = 0;
+    pid_t pid = pipe_state.pid;
     int status;
     int subs_pipe_fd[2];
-    if (sub_shell_var.first)
+    if (sub_shell_var.first) {
         pipe(subs_pipe_fd);
-
+    }
     if (argv.empty()) {
         return EXIT_SUCCESS;
     }
-
     for (auto &command : inner_commands) {
         if (command.first == argv[0]) {
             return command.second(argv);
         }
     }
-
     std::vector<const char *> args_for_execvp;
     args_for_execvp.reserve(argv.size());
     for (const auto &el : argv) {
@@ -77,19 +75,15 @@ int execute(std::vector<std::string> &&argv,
             dup2(subs_pipe_fd[1], STDOUT_FILENO);
         }
         if (pipe_state.re) {
-            if (pipe_state.red.redirect_in && pipe_state.first_pipe) {
+            if (pipe_state.red.redirect_in) {
                 int input_fd = open(pipe_state.red.fin.c_str(), O_RDONLY);
                 if (dup2(input_fd, STDIN_FILENO) == -1) {
                     std::cerr << "Error while redirecting from " << pipe_state.red.fin << std::endl;
                     merrno_val = errno;
                     matexit();
                 }
-            } else {
-                std::cerr << "Error while redirecting stdin in pipe!" << std::endl;
-                merrno_val = ESTRPIPE;
-                matexit();
             }
-            if (pipe_state.red.redirect_out && pipe_state.last_pipe) {
+            if (pipe_state.red.redirect_out) {
                 int out_fd = open(pipe_state.red.fout.c_str(), O_WRONLY | O_CREAT,
                                   S_IROTH | S_IRGRP | S_IWGRP | S_IWUSR | S_IRUSR | S_IRWXU);
                 if (dup2(out_fd, STDOUT_FILENO) == -1) {
@@ -97,10 +91,6 @@ int execute(std::vector<std::string> &&argv,
                     merrno_val = errno;
                     matexit();
                 }
-            } else {
-                std::cerr << "Error while redirecting stdout in pipe!" << std::endl;
-                merrno_val = ESTRPIPE;
-                matexit();
             }
             if (pipe_state.red.redirect_err) {
                 int error_fd = open(pipe_state.red.ferr.c_str(), O_WRONLY | O_CREAT,
@@ -276,42 +266,59 @@ struct pipe_desc_t {
 };
 
 struct pipe_proc_t {
-    pipe_proc_t(std::string &&command, pipe_desc_t &&pipe, pipe_state_t &&pipe_state, pid_t pid = 0)
-            : command(std::move(command)), pipe(pipe), pipe_state(std::move(pipe_state)), pid(pid) {}
+    pipe_proc_t(std::vector<std::string> &&command, pipe_desc_t &&pipe, pipe_state_t &&pipe_state)
+            : command(std::move(command)), pipe(pipe), pipe_state(std::move(pipe_state)) {}
 
-    std::string command;
+    std::vector<std::string> command;
     pipe_desc_t pipe;
     pipe_state_t pipe_state;
-    pid_t pid;
 };
 
 static std::vector<pipe_proc_t> build_pipeline(std::string &&line) {
     size_t pipeline_size = std::count(line.begin(), line.end(), '|') + 1;
     int tmp_desc[2];
     std::vector<pipe_proc_t> pipeline{};
+    std::vector<std::string> arguments_for_execv;
     pipeline.reserve(pipeline_size);
+    bool bg = false, re;;
+    redirections rd;
+
+    strip(line);
+    if (line[line.size() - 1] == '&') {
+        line.pop_back();
+        bg = true;
+    }
     line = expand_vars(line);
-    if (pipeline_size) {
-        pipeline.emplace_back(std::move(line), pipe_desc_t{STDIN_FILENO, STDOUT_FILENO},
-                              pipe_state_t{false, true, true});
+    if (pipeline_size == 1) {
+        arguments_for_execv = split_line(line);
+        re = expand_redirections(arguments_for_execv, rd);
+        arguments_for_execv = expand_globs(std::move(arguments_for_execv));
+
+        pipeline.emplace_back(std::move(arguments_for_execv), pipe_desc_t{STDIN_FILENO, STDOUT_FILENO},
+                              pipe_state_t{false, true, true, bg, re, rd, 0});
         return pipeline;
     }
 
     std::vector<std::string> commands{};
     commands.reserve(pipeline_size);
     boost::split(commands, std::move(line), boost::is_any_of("|"));
-
-    pipeline.emplace_back(std::move(commands[0]), pipe_desc_t{STDIN_FILENO, STDOUT_FILENO},
-                          pipe_state_t{true, true, false});
+    arguments_for_execv = split_line(commands[0]);
+    re = expand_redirections(arguments_for_execv, rd);
+    arguments_for_execv = expand_globs(std::move(arguments_for_execv));
+    pipeline.emplace_back(std::move(arguments_for_execv), pipe_desc_t{STDIN_FILENO, STDOUT_FILENO},
+                          pipe_state_t{true, true, false, bg, re, rd, 0});
     for (size_t i = 1; i < pipeline_size; ++i) {
         if (pipe(tmp_desc) == -1) {
             std::cerr << "Error: while creating pipe!" << std::endl;
-            // TODO: return error to outer scope
+            // TODO: return error to outer
         }
         pipeline[i - 1].pipe.out = tmp_desc[1];
-        pipeline.emplace_back(std::move(commands[i]),
+        arguments_for_execv = split_line(commands[i]);
+        re = expand_redirections(arguments_for_execv, rd);
+        arguments_for_execv = expand_globs(std::move(arguments_for_execv));
+        pipeline.emplace_back(std::move(arguments_for_execv),
                               pipe_desc_t{tmp_desc[0], -1},
-                              pipe_state_t{true, false, false});
+                              pipe_state_t{true, false, false, bg, re, rd, 0});
     }
     pipeline[pipeline_size - 1].pipe.out = STDOUT_FILENO;
     pipeline[pipeline_size - 1].pipe_state.last_pipe = true;
@@ -332,28 +339,32 @@ static inline int close_all_pipes(const std::vector<pipe_proc_t> &pipeline) {
     // TODO: add status handling where used
 }
 
+static inline void kill_pipeline(const std::vector<pipe_proc_t> &pipeline) {
+    for (auto &pipe_el : pipeline) {
+        if (kill(pipe_el.pipe_state.pid, SIGTERM) == -1) {
+            std::cerr << "Error: fail to kill '" << pipe_el.command[0] << "' (pid=" << pipe_el.pipe_state.pid << ")"
+                      << std::endl;
+        } // TODO: check if is valid to kill here
+    }
+}
+
 static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<bool, std::string> &subs = {}) {
-    bool in_parent = true, bg = false, re;
-    redirections rd;
-    std::vector<std::string> arguments_for_execv;
+    bool in_parent;
+    int status;
+
+    if (pipeline.size() == 1) {
+        return execute(std::move(pipeline[0].command), pipeline[0].pipe_state, subs);
+    }
 
     for (auto &pipe_el : pipeline) {
-        arguments_for_execv = split_line(pipe_el.command);
-        if (arguments_for_execv.back() == "&") { // TODO: move background
-            arguments_for_execv.pop_back();
-            bg = true;
-        }
-        re = expand_redirections(arguments_for_execv, rd);
-        arguments_for_execv = expand_globs(std::move(arguments_for_execv));
-
-        if (arguments_for_execv.empty())
+        if (pipe_el.command.empty())
             return EXIT_SUCCESS;
-
-        pipe_el.pipe_state.bg = bg;
-        pipe_el.pipe_state.re = re;
-        pipe_el.pipe_state.red = rd;
-
-        switch (pipe_el.pid = fork()) {
+        if ((!pipe_el.pipe_state.first_pipe && pipe_el.pipe_state.red.redirect_in) ||
+            (!pipe_el.pipe_state.last_pipe && pipe_el.pipe_state.red.redirect_out)) {
+            std::cerr << "Error: bad redirect in pipeline" << std::endl;
+            return EXIT_FAILURE;
+        }
+        switch (pipe_el.pipe_state.pid = fork()) {
             case -1:
                 std::cerr << "fork" << std::endl;
                 return EXIT_SUCCESS;
@@ -363,36 +374,37 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
             default:            /* Parent falls through to create next child */
                 break;
         }
-        if (in_parent)
-            continue;
-        if (pipe_el.pipe.in != STDIN_FILENO)
-            if (dup2(pipe_el.pipe.in, STDIN_FILENO) == -1)
-                std::cerr << "dup2 in" << std::endl;
-        if (pipe_el.pipe.out != STDOUT_FILENO)
-            if (dup2(pipe_el.pipe.out, STDOUT_FILENO) == -1)
-                std::cerr << "dup2 out" << std::endl;
-        if (close_all_pipes(pipeline) == EXIT_FAILURE) {
-            std::cerr << "Error: while closing pipes!" << std::endl;
+        if (!in_parent) {
+            if (pipe_el.pipe.in != STDIN_FILENO)
+                if (dup2(pipe_el.pipe.in, STDIN_FILENO) == -1)
+                    std::cerr << "dup2 in" << std::endl;
+            if (pipe_el.pipe.out != STDOUT_FILENO)
+                if (dup2(pipe_el.pipe.out, STDOUT_FILENO) == -1)
+                    std::cerr << "dup2 out" << std::endl;
+            if (close_all_pipes(pipeline) == EXIT_FAILURE) {
+                std::cerr << "Error: while closing pipes!" << std::endl;
+            }
         }
-
-        return execute(std::move(arguments_for_execv), pipe_el.pipe_state, subs);
+        status = execute(std::move(pipe_el.command), pipe_el.pipe_state, subs);
+        if (in_parent && status != EXIT_SUCCESS) {
+            kill_pipeline(pipeline);
+            return EXIT_FAILURE;
+        }
     }
-
     /* Parent closes unused file descriptors for pipe, and waits for children */
     if (close_all_pipes(pipeline) == EXIT_FAILURE) {
         std::cerr << "Error: while closing pipes!" << std::endl;
-        for (auto &pipe_el : pipeline) {
-            kill(pipe_el.pid, SIGTERM); // TODO: check if valid
-        }
+        kill_pipeline(pipeline);
+        return EXIT_FAILURE;
     }
-
-    int status;
     for (auto &pipe_el : pipeline) {
         do {
-            waitpid(pipe_el.pid, &status, WUNTRACED);
+            waitpid(pipe_el.pipe_state.pid, &status, WUNTRACED);
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-        if (status == -1)
+        if (status == -1) {
             std::cerr << "Error: fail to wait pipeline element with status: " << status << std::endl;
+            return EXIT_FAILURE;
+        }
     }
     return EXIT_SUCCESS;
 }

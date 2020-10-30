@@ -26,6 +26,7 @@ std::vector<std::string> split_line(std::string &line);
 struct pipe_state_t {
     bool in_pipe{}, first_pipe{}, last_pipe{}, bg{}, re{};
     redirections red{};
+    pid_t pid;
 };
 
 int execute(std::vector<std::string> &&argv, const pipe_state_t &pipe_state,
