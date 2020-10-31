@@ -33,7 +33,7 @@ add_subdirectory(programs/mycat)
 add_subdirectory(programs/mycp)
 
 # Project source compilation
-add_executable(${PROJECT_NAME} src/main.cpp src/shell.cpp src/options_parser.cpp src/glob_posix.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/shell.cpp src/options_parser.cpp src/glob_posix.cpp src/commands.cpp)
 
 install(EXPORT mycat DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(EXPORT mycp DESTINATION ${PROJECT_SOURCE_DIR}/bin)

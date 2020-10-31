@@ -14,13 +14,13 @@
 #include <vector>
 #include <algorithm>
 #include <cctype>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <boost/program_options.hpp>
 #include <fcntl.h>
+#include <cstdlib>
 
 #include "glob_posix.h"
 #include "shell.h"
+#include "commands.hpp"
 #include "merrno.h" // extern merrno_val
 
 __thread int merrno_val = 0;
@@ -36,12 +36,6 @@ std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_comm
         {"merrno",  merrno},
         {".",       myexec}
 };
-
-void matexit() {
-    write_history(".myshell_history");
-    fclose(rl_instream);
-    exit(EXIT_FAILURE);
-}
 
 int execute(std::vector<std::string> &&argv,
             const pipe_state_t &pipe_state = {false, true, true, false, false, redirections{}, 0},
@@ -511,17 +505,6 @@ void loop() {
     matexit();
 }
 
-int too_many_arguments(std::string const &program_name) {
-    std::cerr << program_name.data() << ": too many arguments" << std::endl;
-    merrno_val = E2BIG;
-    return EXIT_FAILURE;
-}
-
-int no_arguments(std::string const &program_name) {
-    std::cerr << program_name.data() << "no arguments, unexpected error" << std::endl;
-    merrno_val = EINVAL;
-    return (EXIT_FAILURE);
-}
 
 namespace po = boost::program_options;
 
