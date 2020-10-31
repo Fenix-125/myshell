@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include "shell.h"
+#include "pipes.hpp"
 
 std::vector<std::string> expand_globs(std::vector<std::string> &&args);
 

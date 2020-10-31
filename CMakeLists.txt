@@ -38,7 +38,8 @@ add_executable(${PROJECT_NAME} src/main.cpp
         src/options_parser.cpp
         src/glob_posix.cpp
         src/commands.cpp
-        src/line_operations.cpp)
+        src/line_operations.cpp
+        src/pipes.cpp)
 
 install(EXPORT mycat DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(EXPORT mycp DESTINATION ${PROJECT_SOURCE_DIR}/bin)
