@@ -7,6 +7,7 @@
 
 #include <map>
 #include <vector>
+#include <string>
 
 struct redirections {
     bool redirect_in = false;
@@ -23,7 +24,18 @@ std::string read_line(bool internal_func);
 
 std::vector<std::string> split_line(std::string &line);
 
-bool execute(std::vector<std::string> &&argv, const redirections &red, bool bg, bool re, std::pair<bool, std::string> subs);
+struct pipe_state_t {
+    bool in_pipe{}, first_pipe{}, last_pipe{}, bg{}, re{};
+    redirections red{};
+    pid_t pid{};
+};
+
+int execute(std::vector<std::string> &&argv, const pipe_state_t &pipe_state,
+            const std::pair<bool, std::string> &sub_shell_var);
+
+bool expand_redirections(std::vector<std::string> &line, redirections &red);
+
+bool expand_subshell(const std::string &line);
 
 int mcd(std::vector<std::string> &argv);
 
