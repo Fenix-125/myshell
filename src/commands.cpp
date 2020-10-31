@@ -57,6 +57,7 @@ int mpwd(std::vector<std::string> &argv) {
 
 int mcd(std::vector<std::string> &argv) {
     const auto parsed = pars(argv, "mcd help");
+    int status;
     if (parsed.help) {
         merrno_val = 0;
         return EXIT_SUCCESS;
@@ -67,8 +68,12 @@ int mcd(std::vector<std::string> &argv) {
         auto tmp = getenv("HOME");
         if (tmp == nullptr)
             std::cerr << "Error reading HOME variable!" << std::endl;
-        else
-            chdir(tmp);
+        else {
+            status = chdir(tmp);
+            if (status != 0) {
+                std::cerr << "Error changing dir!" << std::endl;
+            }
+        }
     } else {
         if (chdir(argv[1].c_str()) != 0) {
             std::cout << "error while mcd" << std::endl;
