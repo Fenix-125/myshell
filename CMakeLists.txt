@@ -6,7 +6,7 @@ project(${PROJECT_NAME} CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 # Options
-option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." ON)
+option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." OFF)
 option(ENABLE_SANITIZERS "Use sanitizers to detect errors." OFF)
 option(ENABLE_CONAN "Use Conan as a package manager." OFF)
 option(ENABLE_PVS_STUDIO "Check using command-line PVS-Studio." OFF)
@@ -55,7 +55,7 @@ if (ENABLE_SANITIZERS)
     find_package(Sanitizers)
 
     # CMake targets to which apply sanitizers
-    add_sanitizers(operations ${PROJECT_NAME})
+    add_sanitizers(${PROJECT_NAME})
 endif ()
 
 #####################################
