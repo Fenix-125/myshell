@@ -14,6 +14,7 @@
 #include "shell.h"
 
 void matexit() {
+    std::cout << "here" << std::endl;
     write_history(".myshell_history");
     fclose(rl_instream);
     exit(EXIT_FAILURE);
@@ -88,8 +89,9 @@ int mexit(std::vector<std::string> &argv) {
     } else if (argv.size() > 2) {
         return too_many_arguments("mexit");
     }
-    matexit();
-    return EXIT_SUCCESS;
+    write_history(".myshell_history");
+    fclose(rl_instream);
+    return std::stoi(argv[1]);
 }
 
 int mecho(std::vector<std::string> &argv) {

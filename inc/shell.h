@@ -29,15 +29,18 @@ struct pipe_state_t {
     pid_t pid{};
 };
 
+struct pipe_proc_t {
+    pipe_proc_t(std::vector<std::string> &&command, pipe_desc_t &&pipe, pipe_state_t &&pipe_state)
+            : command(std::move(command)), pipe(pipe), pipe_state(std::move(pipe_state)) {}
+
+    std::vector<std::string> command;
+    pipe_desc_t pipe;
+    pipe_state_t pipe_state;
+};
+
 void loop();
 
 void launch_loop(bool internal_func);
-
-std::string read_line(bool internal_func);
-
-//std::vector<std::string> split_line(std::string &line);
-
-bool expand_redirections(std::vector<std::string> &line, redirections &red);
 
 bool expand_subshell(const std::string &line);
 

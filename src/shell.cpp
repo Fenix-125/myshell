@@ -18,16 +18,16 @@
 #include <fcntl.h>
 #include <cstdlib>
 
-#include "glob_posix.h"
 #include "shell.h"
 #include "commands.hpp"
+#include "line_operations.hpp"
 #include "merrno.h" // extern merrno_val
 
 __thread int merrno_val = 0;
 
 std::unordered_map<std::string, std::string> global_var_map{};
 
-std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
+const std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
         {"mcd",     mcd},
         {"mexit",   mexit},
         {"mpwd",    mpwd},
@@ -96,6 +96,10 @@ int execute(std::vector<std::string> &&argv,
         for (auto &command : inner_commands) {
             if (command.first == argv[0]) {
                 status = command.second(argv);
+                if (status != 0) {
+                    merrno_val = status;
+                    matexit();
+                }
                 exit(status);
             }
         }
@@ -131,29 +135,13 @@ int execute(std::vector<std::string> &&argv,
 //            } while (!WIFEXITED(status) && !WIFSIGNALED(status));
 //        }
     }
-    merrno_val = 0;
-    return EXIT_SUCCESS;
-}
-
-std::string read_line(bool internal_func) {
-    std::string line;
-    line.reserve(1000);
-    std::string prompt = std::filesystem::current_path().string() + " $ ";
-    if (fileno(rl_instream) == 0) {
-        line = readline(prompt.c_str());
-        if (line[0] != '\0')
-            add_history(line.data());
-    } else
-        line = readline("");
-    if (line.empty()) { // TODO: comments needed here
-        if (internal_func)
-            matexit();
-        else
-            return "";
+    if (merrno_val == 0) {
+        return EXIT_SUCCESS;
     }
-    return line;
+    return merrno_val;
 }
 
+// CAN NOT BE MOVED
 static inline auto iterall_effect_pos(const std::string &line, const std::string &token, size_t offset = 0) {
     std::string::size_type effected_word_start = line.find(token, offset);
     if (effected_word_start == std::string::npos)
@@ -168,75 +156,8 @@ static inline auto iterall_effect_pos(const std::string &line, const std::string
     return std::pair<std::string::size_type, std::string::size_type>{effected_word_start, effected_end};
 }
 
-static inline void strip(std::string &s) {
-    size_t index = s.find('#');
-    if (index != std::string::npos) {
-        s.erase(s.begin() + index, s.end());
-    }
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
-        return !std::isspace(ch);
-    }));
-    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
-        return !std::isspace(ch);
-    }).base(), s.end());
-}
-
-std::vector<std::string> split_line(std::string &line) {
-    std::vector<std::string> result;
-    boost::split(result, line, boost::is_any_of(" "));
-    return result;
-}
-
-static inline std::vector<std::string> expand_globs(std::vector<std::string> &&args) {
-    bool not_used = true;
-    std::vector<std::string> res{};
-    res.reserve(args.size());
-    for (auto &el : args) {
-        glob_wrapper::glob_parser glob{el};
-        while (glob) {
-            res.emplace_back(glob.get_file_name());
-            glob.next();
-            not_used = false;
-        }
-        if (not_used) {
-            res.emplace_back(std::move(el));
-        }
-        not_used = true;
-    }
-    return res;
-}
-
-bool expand_redirections(std::vector<std::string> &line, redirections &red) {
-    if (line.size() <= 2) return false;
-    if (line[line.size() - 2] == ">") {
-        red.redirect_out = true;
-        red.fout = line.back();
-    } else if (line.size() <= 4 and line[line.size() - 3] == ">" and line.back() == "2>&1") {
-        red.redirect_out = true;
-        red.redirect_err = true;
-        red.fout = line[line.size() - 2];
-        red.ferr = line[line.size() - 2];
-        line.pop_back();
-    } else if (line[line.size() - 2] == "2>") {
-        red.redirect_err = true;
-        red.ferr = line.back();
-    } else if (line[line.size() - 2] == "<") {
-        red.redirect_in = true;
-        red.fin = line.back();
-    } else if (line[line.size() - 2] == "&>") {
-        red.redirect_out = true;
-        red.redirect_err = true;
-        red.ferr = line.back();
-        red.fout = line.back();
-    } else {
-        return false;
-    }
-    line.pop_back();
-    line.pop_back();
-    return true;
-}
-
-static inline std::string &expand_vars(std::string &line) {
+// CAN NOT BE MOVED
+std::string &expand_vars(std::string &line) {
     std::stringstream s{};
     std::string name;
     const std::string token = "$";
@@ -255,15 +176,6 @@ static inline std::string &expand_vars(std::string &line) {
     line = s.str();
     return line;
 }
-
-struct pipe_proc_t {
-    pipe_proc_t(std::vector<std::string> &&command, pipe_desc_t &&pipe, pipe_state_t &&pipe_state)
-            : command(std::move(command)), pipe(pipe), pipe_state(std::move(pipe_state)) {}
-
-    std::vector<std::string> command;
-    pipe_desc_t pipe;
-    pipe_state_t pipe_state;
-};
 
 static inline int close_all_pipes(const std::vector<pipe_proc_t> &pipeline) {
     int exit_status = EXIT_SUCCESS;
@@ -440,6 +352,7 @@ static int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<boo
     return EXIT_SUCCESS;
 }
 
+// CAN NOT BE MOVED
 bool expand_subshell(const std::string &line) {
     auto dindex = line.find('$');
     auto lindex = line.find('(');
