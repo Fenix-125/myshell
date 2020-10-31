@@ -10,7 +10,6 @@
 #include <vector>
 #include <string>
 #include <filesystem>
-#include <execution>
 #include <boost/algorithm/string.hpp>
 
 #include "glob_posix.h"
