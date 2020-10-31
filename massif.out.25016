@@ -1,0 +1,1311 @@
+desc: (none)
+cmd: ./myshell
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=6192026
+mem_heap_B=72704
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=6313937
+mem_heap_B=82495
+mem_heap_extra_B=1113
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=6476613
+mem_heap_B=88174
+mem_heap_extra_B=6810
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=6604403
+mem_heap_B=92725
+mem_heap_extra_B=11075
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=6692105
+mem_heap_B=95796
+mem_heap_extra_B=14124
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=6856393
+mem_heap_B=207498
+mem_heap_extra_B=16086
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=6972926
+mem_heap_B=309596
+mem_heap_extra_B=16284
+mem_stacks_B=0
+heap_tree=detailed
+n7: 309596 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n6: 211893 0x4960649: xmalloc (in /usr/lib/libreadline.so.8.0)
+  n1: 185040 0x493EE3E: rl_make_bare_keymap (in /usr/lib/libreadline.so.8.0)
+   n2: 185040 0x494632A: rl_generic_bind (in /usr/lib/libreadline.so.8.0)
+    n10: 152144 0x49474C6: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/libreadline.so.8.0)
+     n3: 24672 0x4939282: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A5D5: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 24672 0x49554B6: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 20560 0x4955466: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n2: 16448 0x4939257: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 12336 0x4939292: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 4112 0x493A5D5: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 12336 0x49554CA: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 4112 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 12336 0x49554DE: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 4112 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 12336 0x49554F2: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 4112 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 8224 0x493A621: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 8224 0x493A635: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+    n1: 32896 0x494803E: rl_parse_and_bind (in /usr/lib/libreadline.so.8.0)
+     n1: 32896 0x494822D: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 32896 0x493A588: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 32896 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 32896 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 32896 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 32896 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 32896 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n1: 7560 0x4959CF4: alloc_history_entry (in /usr/lib/libreadline.so.8.0)
+   n1: 7560 0x4959FB9: add_history (in /usr/lib/libreadline.so.8.0)
+    n1: 7560 0x495DEBB: read_history_range (in /usr/lib/libreadline.so.8.0)
+     n1: 7560 0x1199CB: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n0: 7560 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n0: 7417 in 18 places, all below massif's threshold (1.00%)
+  n1: 4080 0x4955ECA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+   n1: 4080 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+    n1: 4080 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+     n1: 4080 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4080 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+       n1: 4080 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n0: 4080 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n1: 4016 0x495A014: add_history (in /usr/lib/libreadline.so.8.0)
+   n1: 4016 0x495DEBB: read_history_range (in /usr/lib/libreadline.so.8.0)
+    n1: 4016 0x1199CB: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n0: 4016 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n1: 3780 0x4959F95: add_history (in /usr/lib/libreadline.so.8.0)
+   n1: 3780 0x495DEBB: read_history_range (in /usr/lib/libreadline.so.8.0)
+    n1: 3780 0x1199CB: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n0: 3780 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n1: 72704 0x4A1445A: pool (eh_alloc.cc:123)
+  n1: 72704 0x4A1445A: __static_initialization_and_destruction_0 (eh_alloc.cc:262)
+   n1: 72704 0x4A1445A: _GLOBAL__sub_I_eh_alloc.cc (eh_alloc.cc:338)
+    n1: 72704 0x40112DD: call_init.part.0 (in /usr/lib/ld-2.32.so)
+     n1: 72704 0x40113C7: _dl_init (in /usr/lib/ld-2.32.so)
+      n0: 72704 0x40020C9: ??? (in /usr/lib/ld-2.32.so)
+ n1: 7952 0x4EC59F8: ??? (in /usr/lib/libncursesw.so.6.2)
+  n1: 7952 0x4EC61AD: _nc_find_type_entry (in /usr/lib/libncursesw.so.6.2)
+   n1: 7952 0x4ECA599: tgetstr_sp (in /usr/lib/libncursesw.so.6.2)
+    n1: 7952 0x4955CB4: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+     n1: 7952 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 7952 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 7952 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 7952 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 7952 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 7952 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n0: 6451 in 51 places, all below massif's threshold (1.00%)
+ n1: 3728 0x4CE7DEE: _nl_intern_locale_data (in /usr/lib/libc-2.32.so)
+  n1: 3728 0x4CE8660: _nl_load_locale_from_archive (in /usr/lib/libc-2.32.so)
+   n1: 3728 0x4CE760D: _nl_find_locale (in /usr/lib/libc-2.32.so)
+    n1: 3728 0x4CE71A9: setlocale (in /usr/lib/libc-2.32.so)
+     n1: 3728 0x4958BE3: _rl_init_locale (in /usr/lib/libreadline.so.8.0)
+      n1: 3728 0x4958CD9: _rl_init_eightbit (in /usr/lib/libreadline.so.8.0)
+       n1: 3728 0x493A580: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 3728 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 3728 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 3728 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 3728 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 3728 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n2: 3540 0x4EC6CB4: _nc_doalloc (in /usr/lib/libncursesw.so.6.2)
+  n1: 3328 0x4ECFD53: _nc_read_termtype (in /usr/lib/libncursesw.so.6.2)
+   n1: 3328 0x4ED012D: ??? (in /usr/lib/libncursesw.so.6.2)
+    n1: 3328 0x4ED0515: ??? (in /usr/lib/libncursesw.so.6.2)
+     n1: 3328 0x4ED0645: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.2)
+      n1: 3328 0x4EC9279: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.2)
+       n1: 3328 0x4EC9697: _nc_setupterm (in /usr/lib/libncursesw.so.6.2)
+        n1: 3328 0x4EC9C26: tgetent_sp (in /usr/lib/libncursesw.so.6.2)
+         n1: 3328 0x4955C6C: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+          n1: 3328 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+           n1: 3328 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+            n1: 3328 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 3328 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n1: 3328 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+               n0: 3328 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n0: 212 in 3 places, all below massif's threshold (1.00%)
+ n1: 3328 0x4EC4BF1: ??? (in /usr/lib/libncursesw.so.6.2)
+  n1: 3328 0x4EC96AF: _nc_setupterm (in /usr/lib/libncursesw.so.6.2)
+   n1: 3328 0x4EC9C26: tgetent_sp (in /usr/lib/libncursesw.so.6.2)
+    n1: 3328 0x4955C6C: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+     n1: 3328 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 3328 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 3328 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 3328 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 3328 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 3328 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+#-----------
+snapshot=8
+#-----------
+time=7064432
+mem_heap_B=324984
+mem_heap_extra_B=17952
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=7235697
+mem_heap_B=333113
+mem_heap_extra_B=20775
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=7341940
+mem_heap_B=337744
+mem_heap_extra_B=22640
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=7463027
+mem_heap_B=342400
+mem_heap_extra_B=24480
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=7594553
+mem_heap_B=347133
+mem_heap_extra_B=26171
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=7711950
+mem_heap_B=351287
+mem_heap_extra_B=27353
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=7859199
+mem_heap_B=356042
+mem_heap_extra_B=28790
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=7975322
+mem_heap_B=359447
+mem_heap_extra_B=30185
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=8093116
+mem_heap_B=362595
+mem_heap_extra_B=31485
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=8225063
+mem_heap_B=366194
+mem_heap_extra_B=32942
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=8370387
+mem_heap_B=369846
+mem_heap_extra_B=34354
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=8531638
+mem_heap_B=373627
+mem_heap_extra_B=35885
+mem_stacks_B=0
+heap_tree=detailed
+n8: 373627 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 218024 0x4960649: xmalloc (in /usr/lib/libreadline.so.8.0)
+  n1: 185040 0x493EE3E: rl_make_bare_keymap (in /usr/lib/libreadline.so.8.0)
+   n2: 185040 0x494632A: rl_generic_bind (in /usr/lib/libreadline.so.8.0)
+    n10: 152144 0x49474C6: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/libreadline.so.8.0)
+     n3: 24672 0x4939282: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A5D5: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 24672 0x49554B6: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 20560 0x4955466: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n2: 16448 0x4939257: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 12336 0x4939292: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 4112 0x493A5D5: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 12336 0x49554CA: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 4112 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 12336 0x49554DE: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 4112 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 12336 0x49554F2: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 4112 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 4112 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 4112 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 4112 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 4112 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 4112 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 4112 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 4112 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 8224 0x493A621: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 8224 0x493A635: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+    n1: 32896 0x494803E: rl_parse_and_bind (in /usr/lib/libreadline.so.8.0)
+     n1: 32896 0x494822D: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 32896 0x493A588: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 32896 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 32896 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 32896 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 32896 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 32896 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n0: 25424 in 27 places, all below massif's threshold (1.00%)
+  n1: 7560 0x4959CF4: alloc_history_entry (in /usr/lib/libreadline.so.8.0)
+   n1: 7560 0x4959FB9: add_history (in /usr/lib/libreadline.so.8.0)
+    n1: 7560 0x495DEBB: read_history_range (in /usr/lib/libreadline.so.8.0)
+     n1: 7560 0x1199CB: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n0: 7560 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n1: 72704 0x4A1445A: pool (eh_alloc.cc:123)
+  n1: 72704 0x4A1445A: __static_initialization_and_destruction_0 (eh_alloc.cc:262)
+   n1: 72704 0x4A1445A: _GLOBAL__sub_I_eh_alloc.cc (eh_alloc.cc:338)
+    n1: 72704 0x40112DD: call_init.part.0 (in /usr/lib/ld-2.32.so)
+     n1: 72704 0x40113C7: _dl_init (in /usr/lib/ld-2.32.so)
+      n0: 72704 0x40020C9: ??? (in /usr/lib/ld-2.32.so)
+ n1: 22204 0x4CDE5B8: add_module.constprop.0 (in /usr/lib/libc-2.32.so)
+  n1: 22204 0x4CDEB22: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+   n1: 22204 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+    n1: 22204 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+     n1: 22204 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+      n1: 22204 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+       n1: 22204 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+        n1: 22204 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+         n1: 22204 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+          n1: 22204 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+           n1: 22204 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n1: 22204 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 22204 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n0: 22204 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n1: 19272 0x4CDE2BE: add_alias2.part.0 (in /usr/lib/libc-2.32.so)
+  n1: 19272 0x4CDEAF4: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+   n1: 19272 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+    n1: 19272 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+     n1: 19272 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+      n1: 19272 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+       n1: 19272 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+        n1: 19272 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+         n1: 19272 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+          n1: 19272 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+           n1: 19272 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n1: 19272 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 19272 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n0: 19272 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n0: 17711 in 56 places, all below massif's threshold (1.00%)
+ n2: 11664 0x4DB03E7: tsearch (in /usr/lib/libc-2.32.so)
+  n1: 11616 0x4CDE2F9: add_alias2.part.0 (in /usr/lib/libc-2.32.so)
+   n1: 11616 0x4CDEAF4: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+    n1: 11616 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+     n1: 11616 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+      n1: 11616 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+       n1: 11616 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+        n1: 11616 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+         n1: 11616 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+          n1: 11616 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+           n1: 11616 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+            n1: 11616 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 11616 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n1: 11616 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+               n0: 11616 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n0: 48 in 1 place, below massif's threshold (1.00%)
+ n1: 7952 0x4EC59F8: ??? (in /usr/lib/libncursesw.so.6.2)
+  n1: 7952 0x4EC61AD: _nc_find_type_entry (in /usr/lib/libncursesw.so.6.2)
+   n1: 7952 0x4ECA599: tgetstr_sp (in /usr/lib/libncursesw.so.6.2)
+    n1: 7952 0x4955CB4: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+     n1: 7952 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 7952 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 7952 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 7952 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 7952 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 7952 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n1: 4096 0x4D28E03: _IO_file_doallocate (in /usr/lib/libc-2.32.so)
+  n2: 4096 0x4D3770F: _IO_doallocbuf (in /usr/lib/libc-2.32.so)
+   n1: 4096 0x4D3664B: _IO_file_underflow@@GLIBC_2.2.5 (in /usr/lib/libc-2.32.so)
+    n1: 4096 0x4D2A687: getdelim (in /usr/lib/libc-2.32.so)
+     n1: 4096 0x4CDE7D3: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+      n1: 4096 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+       n1: 4096 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+        n1: 4096 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+         n1: 4096 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+          n1: 4096 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+           n1: 4096 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+            n1: 4096 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+             n1: 4096 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+              n1: 4096 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+               n1: 4096 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+                n1: 4096 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+                 n0: 4096 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=20
+#-----------
+time=8645742
+mem_heap_B=376224
+mem_heap_extra_B=36928
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=8793199
+mem_heap_B=379555
+mem_heap_extra_B=38229
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=8893970
+mem_heap_B=381762
+mem_heap_extra_B=39070
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=8996614
+mem_heap_B=384156
+mem_heap_extra_B=39860
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=9140864
+mem_heap_B=387418
+mem_heap_extra_B=40982
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=9250064
+mem_heap_B=389320
+mem_heap_extra_B=41616
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=9373296
+mem_heap_B=391493
+mem_heap_extra_B=42219
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=9481782
+mem_heap_B=393467
+mem_heap_extra_B=42685
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=9602798
+mem_heap_B=395989
+mem_heap_extra_B=43475
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=9693676
+mem_heap_B=398206
+mem_heap_extra_B=44146
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=9795399
+mem_heap_B=399835
+mem_heap_extra_B=44701
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=9887746
+mem_heap_B=401800
+mem_heap_extra_B=45272
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=10033289
+mem_heap_B=404452
+mem_heap_extra_B=46124
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=10193983
+mem_heap_B=406586
+mem_heap_extra_B=46734
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=10299662
+mem_heap_B=407996
+mem_heap_extra_B=47020
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=10398086
+mem_heap_B=409440
+mem_heap_extra_B=47296
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=10497134
+mem_heap_B=410778
+mem_heap_extra_B=47686
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=10650663
+mem_heap_B=413119
+mem_heap_extra_B=48569
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=10796990
+mem_heap_B=415383
+mem_heap_extra_B=49473
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=10897218
+mem_heap_B=417129
+mem_heap_extra_B=50079
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=10992141
+mem_heap_B=418665
+mem_heap_extra_B=50655
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=11092344
+mem_heap_B=420201
+mem_heap_extra_B=51231
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=11243865
+mem_heap_B=422505
+mem_heap_extra_B=52095
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=11399195
+mem_heap_B=424809
+mem_heap_extra_B=52959
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=11503841
+mem_heap_B=426365
+mem_heap_extra_B=53515
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=11657662
+mem_heap_B=428498
+mem_heap_extra_B=54182
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=11848994
+mem_heap_B=430995
+mem_heap_extra_B=54845
+mem_stacks_B=0
+heap_tree=detailed
+n7: 430995 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 218024 0x4960649: xmalloc (in /usr/lib/libreadline.so.8.0)
+  n1: 185040 0x493EE3E: rl_make_bare_keymap (in /usr/lib/libreadline.so.8.0)
+   n2: 185040 0x494632A: rl_generic_bind (in /usr/lib/libreadline.so.8.0)
+    n10: 152144 0x49474C6: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/libreadline.so.8.0)
+     n3: 24672 0x4939282: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A5D5: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 24672 0x49554B6: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 20560 0x4955466: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n0: 4112 in 1 place, below massif's threshold (1.00%)
+     n2: 16448 0x4939257: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 12336 0x4939292: ??? (in /usr/lib/libreadline.so.8.0)
+      n0: 12336 in 3 places, all below massif's threshold (1.00%)
+     n1: 12336 0x49554CA: ??? (in /usr/lib/libreadline.so.8.0)
+      n0: 12336 in 3 places, all below massif's threshold (1.00%)
+     n1: 12336 0x49554DE: ??? (in /usr/lib/libreadline.so.8.0)
+      n0: 12336 in 3 places, all below massif's threshold (1.00%)
+     n1: 12336 0x49554F2: ??? (in /usr/lib/libreadline.so.8.0)
+      n0: 12336 in 3 places, all below massif's threshold (1.00%)
+     n1: 8224 0x493A621: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 8224 0x493A635: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+    n1: 32896 0x494803E: rl_parse_and_bind (in /usr/lib/libreadline.so.8.0)
+     n1: 32896 0x494822D: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 32896 0x493A588: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 32896 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 32896 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 32896 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 32896 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 32896 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n0: 25424 in 27 places, all below massif's threshold (1.00%)
+  n1: 7560 0x4959CF4: alloc_history_entry (in /usr/lib/libreadline.so.8.0)
+   n1: 7560 0x4959FB9: add_history (in /usr/lib/libreadline.so.8.0)
+    n1: 7560 0x495DEBB: read_history_range (in /usr/lib/libreadline.so.8.0)
+     n1: 7560 0x1199CB: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n0: 7560 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n1: 72704 0x4A1445A: pool (eh_alloc.cc:123)
+  n1: 72704 0x4A1445A: __static_initialization_and_destruction_0 (eh_alloc.cc:262)
+   n1: 72704 0x4A1445A: _GLOBAL__sub_I_eh_alloc.cc (eh_alloc.cc:338)
+    n1: 72704 0x40112DD: call_init.part.0 (in /usr/lib/ld-2.32.so)
+     n1: 72704 0x40113C7: _dl_init (in /usr/lib/ld-2.32.so)
+      n0: 72704 0x40020C9: ??? (in /usr/lib/ld-2.32.so)
+ n1: 56022 0x4CDE5B8: add_module.constprop.0 (in /usr/lib/libc-2.32.so)
+  n1: 56022 0x4CDEB22: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+   n1: 56022 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+    n1: 56022 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+     n1: 56022 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+      n1: 56022 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+       n1: 56022 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+        n1: 56022 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+         n1: 56022 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+          n1: 56022 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+           n1: 56022 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n1: 56022 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 56022 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n0: 56022 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n1: 33678 0x4CDE2BE: add_alias2.part.0 (in /usr/lib/libc-2.32.so)
+  n1: 33678 0x4CDEAF4: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+   n1: 33678 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+    n1: 33678 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+     n1: 33678 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+      n1: 33678 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+       n1: 33678 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+        n1: 33678 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+         n1: 33678 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+          n1: 33678 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+           n1: 33678 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n1: 33678 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 33678 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n0: 33678 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n0: 21807 in 57 places, all below massif's threshold (1.00%)
+ n2: 20808 0x4DB03E7: tsearch (in /usr/lib/libc-2.32.so)
+  n1: 20760 0x4CDE2F9: add_alias2.part.0 (in /usr/lib/libc-2.32.so)
+   n1: 20760 0x4CDEAF4: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+    n1: 20760 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+     n1: 20760 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+      n1: 20760 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+       n1: 20760 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+        n1: 20760 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+         n1: 20760 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+          n1: 20760 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+           n1: 20760 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+            n1: 20760 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 20760 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n1: 20760 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+               n0: 20760 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n0: 48 in 1 place, below massif's threshold (1.00%)
+ n1: 7952 0x4EC59F8: ??? (in /usr/lib/libncursesw.so.6.2)
+  n1: 7952 0x4EC61AD: _nc_find_type_entry (in /usr/lib/libncursesw.so.6.2)
+   n1: 7952 0x4ECA599: tgetstr_sp (in /usr/lib/libncursesw.so.6.2)
+    n1: 7952 0x4955CB4: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+     n1: 7952 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 7952 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 7952 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 7952 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 7952 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 7952 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+#-----------
+snapshot=47
+#-----------
+time=12009162
+mem_heap_B=428251
+mem_heap_extra_B=55669
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=13480295
+mem_heap_B=429059
+mem_heap_extra_B=55973
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=13596105
+mem_heap_B=463250
+mem_heap_extra_B=56118
+mem_stacks_B=0
+heap_tree=peak
+n8: 463250 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 218076 0x4960649: xmalloc (in /usr/lib/libreadline.so.8.0)
+  n1: 185040 0x493EE3E: rl_make_bare_keymap (in /usr/lib/libreadline.so.8.0)
+   n2: 185040 0x494632A: rl_generic_bind (in /usr/lib/libreadline.so.8.0)
+    n10: 152144 0x49474C6: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/libreadline.so.8.0)
+     n3: 24672 0x4939282: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A5D5: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 24672 0x49554B6: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x4955DB2: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n3: 20560 0x4955466: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x4955DBE: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x4955DCA: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+         n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n0: 4112 in 1 place, below massif's threshold (1.00%)
+     n2: 16448 0x4939257: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A5E4: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 8224 0x493A602: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 12336 0x4939292: ??? (in /usr/lib/libreadline.so.8.0)
+      n0: 12336 in 3 places, all below massif's threshold (1.00%)
+     n1: 12336 0x49554CA: ??? (in /usr/lib/libreadline.so.8.0)
+      n0: 12336 in 3 places, all below massif's threshold (1.00%)
+     n1: 12336 0x49554DE: ??? (in /usr/lib/libreadline.so.8.0)
+      n0: 12336 in 3 places, all below massif's threshold (1.00%)
+     n1: 12336 0x49554F2: ??? (in /usr/lib/libreadline.so.8.0)
+      n0: 12336 in 3 places, all below massif's threshold (1.00%)
+     n1: 8224 0x493A621: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 8224 0x493A635: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 8224 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 8224 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 8224 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 8224 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 8224 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+    n1: 32896 0x494803E: rl_parse_and_bind (in /usr/lib/libreadline.so.8.0)
+     n1: 32896 0x494822D: ??? (in /usr/lib/libreadline.so.8.0)
+      n1: 32896 0x493A588: rl_initialize (in /usr/lib/libreadline.so.8.0)
+       n1: 32896 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+        n1: 32896 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 32896 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n1: 32896 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+           n0: 32896 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n0: 25452 in 29 places, all below massif's threshold (1.00%)
+  n1: 7584 0x4959CF4: alloc_history_entry (in /usr/lib/libreadline.so.8.0)
+   n2: 7584 0x4959FB9: add_history (in /usr/lib/libreadline.so.8.0)
+    n1: 7560 0x495DEBB: read_history_range (in /usr/lib/libreadline.so.8.0)
+     n1: 7560 0x1199CB: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n0: 7560 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+    n0: 24 in 1 place, below massif's threshold (1.00%)
+ n1: 72704 0x4A1445A: pool (eh_alloc.cc:123)
+  n1: 72704 0x4A1445A: __static_initialization_and_destruction_0 (eh_alloc.cc:262)
+   n1: 72704 0x4A1445A: _GLOBAL__sub_I_eh_alloc.cc (eh_alloc.cc:338)
+    n1: 72704 0x40112DD: call_init.part.0 (in /usr/lib/ld-2.32.so)
+     n1: 72704 0x40113C7: _dl_init (in /usr/lib/ld-2.32.so)
+      n0: 72704 0x40020C9: ??? (in /usr/lib/ld-2.32.so)
+ n1: 56022 0x4CDE5B8: add_module.constprop.0 (in /usr/lib/libc-2.32.so)
+  n1: 56022 0x4CDEB22: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+   n1: 56022 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+    n1: 56022 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+     n1: 56022 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+      n1: 56022 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+       n1: 56022 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+        n1: 56022 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+         n1: 56022 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+          n1: 56022 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+           n1: 56022 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n1: 56022 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 56022 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n0: 56022 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n2: 35252 0x4CDE2BE: add_alias2.part.0 (in /usr/lib/libc-2.32.so)
+  n1: 33678 0x4CDEAF4: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+   n1: 33678 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+    n1: 33678 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+     n1: 33678 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+      n1: 33678 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+       n1: 33678 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+        n1: 33678 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+         n1: 33678 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+          n1: 33678 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+           n1: 33678 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+            n1: 33678 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 33678 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n0: 33678 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+  n0: 1574 in 1 place, below massif's threshold (1.00%)
+ n1: 32816 0x4D7C65A: __alloc_dir (in /usr/lib/libc-2.32.so)
+  n1: 32816 0x4D7C769: opendir_tail (in /usr/lib/libc-2.32.so)
+   n1: 32816 0x11F4ED: glob_wrapper::glob_parser::glob_parser(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+    n1: 32816 0x12CAEE: expand_globs(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&&) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+     n1: 32816 0x116829: build_pipeline(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+      n1: 32816 0x1192B1: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+       n1: 32816 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n0: 32816 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+ n2: 21696 0x4DB03E7: tsearch (in /usr/lib/libc-2.32.so)
+  n2: 21624 0x4CDE2F9: add_alias2.part.0 (in /usr/lib/libc-2.32.so)
+   n1: 20760 0x4CDEAF4: __gconv_read_conf (in /usr/lib/libc-2.32.so)
+    n1: 20760 0x4F0A18E: __pthread_once_slow (in /usr/lib/libpthread-2.32.so)
+     n1: 20760 0x4CDD9C5: __gconv_find_transform (in /usr/lib/libc-2.32.so)
+      n1: 20760 0x4D6A305: __wcsmbs_load_conv (in /usr/lib/libc-2.32.so)
+       n1: 20760 0x4D5EC0E: mbrtowc (in /usr/lib/libc-2.32.so)
+        n1: 20760 0x494D54B: ??? (in /usr/lib/libreadline.so.8.0)
+         n1: 20760 0x494F5F5: rl_redisplay (in /usr/lib/libreadline.so.8.0)
+          n1: 20760 0x493940F: readline_internal_setup (in /usr/lib/libreadline.so.8.0)
+           n1: 20760 0x493A843: readline (in /usr/lib/libreadline.so.8.0)
+            n1: 20760 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+             n1: 20760 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+              n1: 20760 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+               n0: 20760 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+   n0: 864 in 1 place, below massif's threshold (1.00%)
+  n0: 72 in 2 places, all below massif's threshold (1.00%)
+ n0: 18732 in 64 places, all below massif's threshold (1.00%)
+ n1: 7952 0x4EC59F8: ??? (in /usr/lib/libncursesw.so.6.2)
+  n1: 7952 0x4EC61AD: _nc_find_type_entry (in /usr/lib/libncursesw.so.6.2)
+   n1: 7952 0x4ECA599: tgetstr_sp (in /usr/lib/libncursesw.so.6.2)
+    n1: 7952 0x4955CB4: _rl_init_terminal_io (in /usr/lib/libreadline.so.8.0)
+     n1: 7952 0x493A55C: rl_initialize (in /usr/lib/libreadline.so.8.0)
+      n1: 7952 0x493A81D: readline (in /usr/lib/libreadline.so.8.0)
+       n1: 7952 0x12C35F: read_line[abi:cxx11](bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+        n1: 7952 0x1191CA: launch_loop(bool) (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+         n1: 7952 0x119872: loop() (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+          n0: 7952 0x112463: main (in /home/myralllka/Documents/OS/lab5_myshell_2/myshell)
+#-----------
+snapshot=50
+#-----------
+time=13685403
+mem_heap_B=431214
+mem_heap_extra_B=56146
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=13774392
+mem_heap_B=430779
+mem_heap_extra_B=56269
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=13862120
+mem_heap_B=343952
+mem_heap_extra_B=51296
+mem_stacks_B=0
+heap_tree=empty

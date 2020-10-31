@@ -92,9 +92,8 @@ int mexit(std::vector<std::string> &argv) {
     } else if (argv.size() > 2) {
         return too_many_arguments("mexit");
     }
-    write_history(".myshell_history");
-    fclose(rl_instream);
-    return std::stoi(argv[1]);
+    matexit();
+    return EXIT_SUCCESS;
 }
 
 int mecho(std::vector<std::string> &argv) {

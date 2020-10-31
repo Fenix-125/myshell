@@ -28,21 +28,11 @@ __thread int merrno_val = 0;
 
 std::unordered_map<std::string, std::string> global_var_map{};
 
-const std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
-        {"mcd",     mcd},
-        {"mexit",   mexit},
-        {"mpwd",    mpwd},
-        {"mecho",   mecho},
-        {"mexport", mexport},
-        {"merrno",  merrno},
-        {".",       myexec}
-};
 
 int execute(std::vector<std::string> &&argv,
             const pipe_state_t &pipe_state,
             const std::pair<int, std::string> &sub_shell_var) {
     pid_t pid = pipe_state.pid;
-    int status;
     if (argv.empty()) {
         return EXIT_SUCCESS;
     }
@@ -93,16 +83,6 @@ int execute(std::vector<std::string> &&argv,
             close(STDIN_FILENO);
             close(STDOUT_FILENO);
             close(STDERR_FILENO);
-        }
-        for (auto &command : inner_commands) {
-            if (command.first == argv[0]) {
-                status = command.second(argv);
-                if (status != 0) {
-                    merrno_val = status;
-                    matexit();
-                }
-                exit(status);
-            }
         }
         if (execvp(args_for_execvp[0], const_cast<char *const *>(args_for_execvp.data()))) {
             if (std::filesystem::path(args_for_execvp[0]).extension() == ".msh") {

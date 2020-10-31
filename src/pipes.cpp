@@ -10,8 +10,24 @@
 #include <unistd.h>
 #include <csignal>
 #include <wait.h>
+#include <map>
+#include <utility>
+#include <boost/function.hpp>
 
 #include "pipes.hpp"
+#include "commands.hpp"
+#include "shell.h"
+#include "merrno.h"
+
+const std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
+        {"mcd",     mcd},
+        {"mexit",   mexit},
+        {"mpwd",    mpwd},
+        {"mecho",   mecho},
+        {"mexport", mexport},
+        {"merrno",  merrno},
+        {".",       myexec}
+};
 
 void kill_pipeline(const std::vector<pipe_proc_t> &pipeline) {
     for (auto &pipe_el : pipeline) {
@@ -61,6 +77,16 @@ int run_pipeline(std::vector<pipe_proc_t> &&pipeline, const std::pair<bool, std:
             (pipe_el.pipe_state.last_pipe && pipe_el.pipe_state.red.redirect_out && subs.first)) {
             std::cerr << "Error: bad redirect in pipeline" << std::endl;
             return EXIT_SUCCESS;
+        }
+        for (auto &command : inner_commands) {
+            if (command.first == pipe_el.command[0]) {
+                status = command.second(pipe_el.command);
+                if (status != 0) {
+                    merrno_val = status;
+                    matexit();
+                }
+                return EXIT_SUCCESS;
+            }
         }
         switch (pipe_el.pipe_state.pid = fork()) {
             case -1:
