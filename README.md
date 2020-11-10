@@ -55,7 +55,7 @@ telnet localhost 6666
 
 ### Additional
 
--
+- .myshell_history is in `~/` 
 
 ## References
 - [inlined glob library](https://bitbucket.org/szx/glob/src/master/)

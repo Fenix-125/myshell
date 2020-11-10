@@ -235,6 +235,11 @@ void launch_loop(bool internal_func) {
     std::string line;
     int status = EXIT_SUCCESS;
     do {
+//        auto c = fgetc(rl_instream);
+//        if (c == EOF){
+//            matexit();
+//        }
+//        ungetc(c, rl_instream);
         line = read_line(internal_func);
         if (line.empty()) {
             continue;
@@ -258,8 +263,8 @@ void loop() {
         auto env = std::string{e};
         env += ":" + std::filesystem::current_path().string() + "/bin/";
         setenv("PATH", env.c_str(), 1);
-        if (std::filesystem::exists(".myshell_history")) {
-            read_history(".myshell_history");
+        if (std::filesystem::exists("~/.myshell_history")) {
+            read_history("~/.myshell_history");
         }
     }
     launch_loop(false);

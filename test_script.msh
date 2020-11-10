@@ -1,4 +1,7 @@
-#!/home/myralllka/Documents/OS/lab3_myshell/myshell
+#!/home/myralllka/Documents/OS/lab6/myshell
 # Absolute path is necessary in shebang.
 # My simple script
 ls
+mpwd
+mexport A=5
+mecho $A

@@ -17,7 +17,8 @@
 #include "shell.h"
 
 void matexit() {
-    write_history(".myshell_history");
+    auto a = write_history("~/.myshell_history");
+    std::cout << "wr hist = " << a << "\n";
     fclose(rl_instream);
     exit(EXIT_FAILURE);
 }

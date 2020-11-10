@@ -4,10 +4,14 @@
 #include <iostream>
 #include <filesystem>
 #include <cstdio>
-#include "shell.h"
-#include "options_parser.h"
 #include <readline/readline.h>
 #include <server.h>
+
+#include "shell.h"
+#include "merrno.h"
+#include "options_parser.h"
+
+bool serv = false;
 
 command_line_options parse_arguments(int argc, char **argv);
 
@@ -23,6 +27,8 @@ int main(int argc, char **argv) {
             std::cerr << "Error: Server do not process script files" << std::endl;
             return EXIT_FAILURE;
         }
+        serv = true;
+        rl_bind_key('\r', []([[maybe_unused]]int a, [[maybe_unused]] int b) { return 0; });
         start_server(loop, conf.get_port());
     }
     if (not conf.get_filenames().empty()) {
@@ -41,6 +47,7 @@ int main(int argc, char **argv) {
     } else {
         rl_instream = stdin;
     }
+//    std::cout << "loop\n";
     loop();
     return EXIT_SUCCESS;
 }

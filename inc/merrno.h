@@ -6,5 +6,5 @@
 #define MYSHELL_MERRNO_H
 
 extern __thread int merrno_val;
-
+extern bool serv;
 #endif //MYSHELL_MERRNO_H

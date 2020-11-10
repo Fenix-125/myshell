@@ -1,15 +1,14 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-
 //
 // Created by myralllka on 10/31/20.
 //
 
-
 #include <vector>
 #include <string>
 #include <filesystem>
+#include <iostream>
 #include <boost/algorithm/string.hpp>
 
 #include "glob_posix.h"
@@ -39,13 +38,10 @@ std::string read_line(bool internal_func) {
     std::string line;
     line.reserve(1000);
     std::string prompt = std::filesystem::current_path().string() + " $ ";
-    if (fileno(rl_instream) == 0) {
-        line = readline(prompt.c_str());
-        if (line[0] != '\0')
-            add_history(line.data());
-    } else
-        line = readline("");
-    if (line.empty()) { // TODO: comments needed here
+    line = readline(prompt.c_str());
+    if (line[0] != '\0')
+        add_history(line.data());
+    if (line.empty()) {
         if (internal_func)
             matexit();
         else

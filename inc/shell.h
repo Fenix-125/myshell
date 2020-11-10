@@ -10,6 +10,8 @@
 #include <vector>
 #include <string>
 
+//#define DEBUG
+
 void loop();
 
 void launch_loop(bool internal_func);
