@@ -7,6 +7,7 @@
 #include "shell.h"
 #include "options_parser.h"
 #include <readline/readline.h>
+#include <server.h>
 
 command_line_options parse_arguments(int argc, char **argv);
 
@@ -14,8 +15,15 @@ int main(int argc, char **argv) {
     command_line_options conf;
     conf.parse(argc, argv);
     if (conf.get_filenames().size() > 1) {
-        std::cerr << "Too many arguments" << std::endl;
+        std::cerr << "Error: Too many arguments" << std::endl;
         return EXIT_FAILURE;
+    }
+    if (conf.get_server()) {
+        if (not conf.get_filenames().empty()) {
+            std::cerr << "Error: Server do not process script files" << std::endl;
+            return EXIT_FAILURE;
+        }
+        start_server(loop, conf.get_port());
     }
     if (not conf.get_filenames().empty()) {
         auto filename = conf.get_filenames()[0];

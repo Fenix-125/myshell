@@ -1,4 +1,4 @@
-# Lab 3 fork-exec: myshell
+# Shell via remote server
 
 ## Team
 
@@ -20,7 +20,15 @@ bash compile.sh
 ```
 ## Usage
 ```
-./myshell
+./myshell -s -p 6666
+```
+on the remote
+```
+telnet IP PORT
+```
+for example from the other ttyX:
+```
+telnet localhost 6666
 ```
 ## Internal commands:
 - mcd

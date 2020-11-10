@@ -14,12 +14,18 @@ public:
 
     [[nodiscard]] std::vector<std::string> get_filenames() const { return filenames; };
 
+    [[nodiscard]] short int get_port() const { return port; };
+
+    [[nodiscard]] bool get_server() const { return server; };
+
     static std::string assert_file_exist(const std::string &f_name);
 
     void parse(int ac, char **av);
 
 private:
     std::vector<std::string> filenames;
+    short int port = 7777;
+    bool server = false;
 
     void init_opt_description();
 
