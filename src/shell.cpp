@@ -22,7 +22,7 @@
 #include "commands.hpp"
 #include "line_operations.hpp"
 #include "pipes.hpp"
-#include "merrno.h" // extern merrno_val
+#include "globals.h" // extern merrno_val
 
 __thread int merrno_val = 0;
 
@@ -113,7 +113,7 @@ int execute(std::vector<std::string> &&argv,
 }
 
 // CAN NOT BE MOVED
-static inline auto iterall_effect_pos(const std::string &line, const std::string &token, size_t offset = 0) {
+static inline auto literal_effect_pos(const std::string &line, const std::string &token, size_t offset = 0) {
     std::string::size_type effected_word_start = line.find(token, offset);
     if (effected_word_start == std::string::npos)
         return std::pair<std::string::size_type, std::string::size_type>{-1, -1};
@@ -133,7 +133,7 @@ std::string &expand_vars(std::string &line) {
     std::string name;
     const std::string token = "$";
     size_t offset = 0u;
-    auto effect_pos = iterall_effect_pos(line, token);
+    auto effect_pos = literal_effect_pos(line, token);
     while (effect_pos.first != std::string::npos) {
         s << line.substr(offset, (effect_pos.first - token.size()) - offset);
         name = line.substr(effect_pos.first, effect_pos.second - effect_pos.first);
@@ -141,7 +141,7 @@ std::string &expand_vars(std::string &line) {
             s << global_var_map[name];
         }
         offset = effect_pos.second;
-        effect_pos = iterall_effect_pos(line, token, offset); // add offset
+        effect_pos = literal_effect_pos(line, token, offset); // add offset
     }
     s << line.substr(offset);
     line = s.str();
@@ -206,7 +206,7 @@ std::vector<pipe_proc_t> build_pipeline(std::string &&line) {
 
 // CAN NOT BE MOVED
 bool expand_subshell(const std::string &line) {
-    auto dindex = line.find('$');
+    auto dindex = line.find('$'); // -V525
     auto lindex = line.find('(');
     auto rindex = line.rfind(')');
     int status = EXIT_SUCCESS;
@@ -235,6 +235,13 @@ void launch_loop(bool internal_func) {
     std::string line;
     int status = EXIT_SUCCESS;
     do {
+        if ((not serv) and internal_func) {
+            auto c = fgetc(rl_instream);
+            if (c == EOF) {
+                matexit();
+            }
+            ungetc(c, rl_instream);
+        }
         line = read_line(internal_func);
         if (line.empty()) {
             continue;
@@ -258,8 +265,8 @@ void loop() {
         auto env = std::string{e};
         env += ":" + std::filesystem::current_path().string() + "/bin/";
         setenv("PATH", env.c_str(), 1);
-        if (std::filesystem::exists(".myshell_history")) {
-            read_history(".myshell_history");
+        if (std::filesystem::exists("~/.history")) {
+            read_history(nullptr);
         }
     }
     launch_loop(false);
