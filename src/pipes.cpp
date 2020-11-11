@@ -17,7 +17,7 @@
 #include "pipes.hpp"
 #include "commands.hpp"
 #include "shell.h"
-#include "merrno.h"
+#include "globals.h"
 
 const std::map<std::string, std::function<int(std::vector<std::string> &)>> inner_commands = {
         {"mcd",     mcd},

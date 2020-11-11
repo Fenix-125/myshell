@@ -75,11 +75,11 @@ bool expand_redirections(std::vector<std::string> &line, redirections &red) {
     if (line[line.size() - 2] == ">") {
         red.redirect_out = true;
         red.fout = line.back();
-    } else if (line.size() <= 4 and line[line.size() - 3] == ">" and line.back() == "2>&1") {
+    } else if (line.size() <= 4 and line[line.size() - 3] == ">" and line.back() == "2>&1") { // -V112
         red.redirect_out = true;
         red.redirect_err = true;
         red.fout = line[line.size() - 2];
-        red.ferr = line[line.size() - 2];
+        red.ferr = red.fout;
         line.pop_back();
     } else if (line[line.size() - 2] == "2>") {
         red.redirect_err = true;
@@ -91,7 +91,7 @@ bool expand_redirections(std::vector<std::string> &line, redirections &red) {
         red.redirect_out = true;
         red.redirect_err = true;
         red.ferr = line.back();
-        red.fout = line.back();
+        red.fout = red.ferr;
     } else {
         return false;
     }

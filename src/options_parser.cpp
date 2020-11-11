@@ -22,7 +22,7 @@ void command_line_options::parse(int ac, char **av) {
         filenames = collect_unrecognized(parsed.options, po::include_positional);
         if (var_map.count("help")) {
             std::cout << opt_conf << "\n";
-            exit(EXIT_SUCCESS);
+            exit(EXIT_SUCCESS); // -V2014
         }
         notify(var_map);
     } catch (std::exception &E) {

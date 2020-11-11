@@ -8,10 +8,11 @@
 #include <server.h>
 
 #include "shell.h"
-#include "merrno.h"
+#include "globals.h"
 #include "options_parser.h"
 
-bool serv = false;
+bool __thread serv = false;
+bool __thread script = false;
 
 command_line_options parse_arguments(int argc, char **argv);
 
@@ -36,6 +37,7 @@ int main(int argc, char **argv) {
         if (std::filesystem::path(filename).extension() == ".msh") {
             rl_instream = fopen(filename.data(), "r");
             rl_outstream = rl_instream;
+            script = true;
             if (rl_instream == nullptr) {
                 std::cerr << "File \"" << filename.data() << "\" does not exists. Stopping program" << std::endl;
                 return EXIT_FAILURE;
@@ -47,7 +49,6 @@ int main(int argc, char **argv) {
     } else {
         rl_instream = stdin;
     }
-//    std::cout << "loop\n";
     loop();
     return EXIT_SUCCESS;
 }

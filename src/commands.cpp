@@ -12,15 +12,16 @@
 #include <filesystem>
 #include <boost/program_options.hpp>
 
-#include "merrno.h"
+#include "globals.h"
 #include "commands.hpp"
 #include "shell.h"
 
 void matexit() {
-    auto a = write_history("~/.myshell_history");
-    std::cout << "wr hist = " << a << "\n";
+    if (!serv) {
+        write_history(nullptr);
+    }
     fclose(rl_instream);
-    exit(EXIT_FAILURE);
+    exit(EXIT_FAILURE); // -V2014
 }
 
 int too_many_arguments(std::string const &program_name) {
@@ -55,7 +56,7 @@ int mpwd(std::vector<std::string> &argv) {
 }
 
 
-int mcd(std::vector<std::string> &argv) {
+int mcd(std::vector<std::string> &argv) { // -V2009
     const auto parsed = pars(argv, "mcd help");
     int status;
     if (parsed.help) {
@@ -118,7 +119,7 @@ int mecho(std::vector<std::string> &argv) {
     return EXIT_SUCCESS;
 }
 
-int myexec(std::vector<std::string> &argv) {
+int myexec(std::vector<std::string> &argv) { // -V2009
     if (argv.empty() || argv.size() == 1) {
         return no_arguments(".");
     } else if (argv.size() > 2) {
@@ -136,7 +137,7 @@ int myexec(std::vector<std::string> &argv) {
         std::cerr << "Bad script extension (.msh required)" << std::endl;
     }
     rl_instream = stdin;
-    rl_outstream = stdout;
+    rl_outstream = stdout; // -V519
     return EXIT_SUCCESS;
 }
 
@@ -178,12 +179,14 @@ parsed_args pars(const std::vector<std::string> &argv, const std::string &help_m
     po::variables_map vm;
     try {
         po::store(po::command_line_parser(argv).options(all).positional(p).run(), vm);
-    } catch (boost::wrapexcept<po::unknown_option> &_e) {}
+    } catch (boost::wrapexcept<po::unknown_option> &_e) {
+        std::cerr << "Line parser error: \n" << _e.get_option_name() << std::endl;
+    }
     try {
         po::notify(vm);
     } catch (const boost::exception &e) {
         std::cerr << "Error: while parsing parameters";
-        exit(1);
+        exit(1); // -V2014
     }
     if (vm.count("help")) {
         std::cout << help_msg << "\n" << visible << std::endl;

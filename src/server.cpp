@@ -1,11 +1,6 @@
-/*
-  ECHOSERV.C
-  ==========
-  (c) Paul Griffiths, 1999
-  Email: mail@paulgriffiths.net
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-  Simple TCP/IP echo server.
-*/
 #include <server.h>
 #include <sys/socket.h>       /*  socket definitions        */
 #include <sys/types.h>        /*  socket types              */
@@ -15,7 +10,7 @@
 #include <iostream>
 
 #include "shell.h"
-#include "merrno.h"
+#include "globals.h"
 
 //static inline std::string get_addr(std::string s, struct sockaddr *cl_addr, socklen_t cl_addr_len) {
 //    switch (cl_addr->sa_family) {
@@ -50,7 +45,8 @@ static bool std_streams_dup(int sock_fd) {
     return true;
 }
 
-void start_server(void(*call_back)(), short int port) {serv = true;
+void start_server(void(*call_back)(), short int port) {
+    serv = true;
     int listen_sock;
     int connection_sock;
     struct sockaddr_in serv_addr{};
@@ -59,7 +55,7 @@ void start_server(void(*call_back)(), short int port) {serv = true;
 
     if ((listen_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         std::cerr << "[myshell] Error: creating listening socket." << std::endl;
-        exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE); // -V2014
     }
 
     memset(&serv_addr, 0, sizeof(serv_addr));
@@ -69,12 +65,12 @@ void start_server(void(*call_back)(), short int port) {serv = true;
 
     if (bind(listen_sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         std::cout << "[myshell] Error calling bind()" << std::endl;
-        exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE); // -V2014
     }
 
     if (listen(listen_sock, 1000) < 0) {
         std::cout << "[myshell] Error calling listen()\n" << std::endl;
-        exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE); // -V2014
     }
 
     struct sockaddr cl_addr{};
@@ -83,7 +79,7 @@ void start_server(void(*call_back)(), short int port) {serv = true;
     while (true) {
         if ((connection_sock = accept(listen_sock, &cl_addr, &cl_addr_len)) < 0) {
             std::cerr << "[myshell] Error calling accept()" << std::endl;
-            exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE); // -V2014
         }
 
         switch (fork()) {
@@ -95,12 +91,23 @@ void start_server(void(*call_back)(), short int port) {serv = true;
                     call_back();
                 }
                 std::cerr << "[myshell] Error: unexpected exit of client!" << std::endl;
-                exit(1);
+                exit(1); // -V2014
             default:
                 if (close(connection_sock) < 0) {
                     std::cerr << "[myshell] Error: calling close() in parent for handled connection!" << std::endl;
-                    exit(EXIT_FAILURE);
+                    exit(EXIT_FAILURE); // -V2014
                 }
         }
     }
 }
+
+/*
+  Based on
+
+  ECHOSERV.C
+  ==========
+  (c) Paul Griffiths, 1999
+  Email: mail@paulgriffiths.net
+
+  Simple TCP/IP echo server.
+*/

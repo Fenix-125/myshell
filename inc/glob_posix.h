@@ -25,8 +25,8 @@ namespace glob_wrapper {
 
     private:
         std::string pattern_;
-        DIR *dir_;
-        struct dirent *dir_entry_;
+        DIR *dir_; // -V122
+        struct dirent *dir_entry_; // -V122
     };
 
 } // namespace glob_wrapper
