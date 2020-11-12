@@ -14,6 +14,7 @@
 #include "glob_posix.h"
 #include "line_operations.hpp"
 #include "commands.hpp"
+#include "globals.h"
 
 std::vector<std::string> expand_globs(std::vector<std::string> &&args) {
     bool not_used = true;
@@ -39,7 +40,9 @@ std::string read_line(bool internal_func) {
     line.reserve(1000);
     std::string prompt = std::filesystem::current_path().string() + " $ ";
     line = readline(prompt.c_str());
-//    write(1, line.data(), line.size());
+    if (state == 2) {
+        write_logs(line);
+    }
     if (line[0] != '\0')
         add_history(line.data());
     if (line.empty()) {

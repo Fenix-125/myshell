@@ -235,7 +235,7 @@ void launch_loop(bool internal_func) {
     std::string line;
     int status = EXIT_SUCCESS;
     do {
-        if ((state == 0 or state == 2) and internal_func) {
+        if ((state == 1) or internal_func) {
             auto c = fgetc(rl_instream);
             if (c == EOF) {
                 matexit();

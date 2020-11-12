@@ -1,6 +1,17 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
+/*
+  Based on:
+
+  ECHOSERV.C
+  ==========
+  (c) Paul Griffiths, 1999
+  Email: mail@paulgriffiths.net
+
+  Simple TCP/IP echo server.
+*/
+
 #include <server.h>
 #include <sys/socket.h>       /*  socket definitions        */
 #include <sys/types.h>        /*  socket types              */
@@ -12,23 +23,23 @@
 #include "shell.h"
 #include "globals.h"
 
+int out_fd = 0;
+__thread char user_ip[24];
+
 void get_addr(std::string &s, struct sockaddr *cl_addr, socklen_t cl_addr_len) {
-    char ad[20];
     auto addr = cl_addr->sa_family;
     if (addr == AF_INET) {
-        std::cout << "[D] AF_INET" << std::endl;
-        inet_ntop(AF_INET, &(((struct sockaddr_in *) cl_addr)->sin_addr), ad, cl_addr_len);
+        inet_ntop(AF_INET, &(((struct sockaddr_in *) cl_addr)->sin_addr), user_ip, cl_addr_len);
     } else if (addr == AF_INET6) {
-        std::cout << "[D] AF_INET6" << std::endl;
-        inet_ntop(AF_INET6, &(((struct sockaddr_in6 *) cl_addr)->sin6_addr), ad, cl_addr_len);
+        inet_ntop(AF_INET6, &(((struct sockaddr_in6 *) cl_addr)->sin6_addr), user_ip, cl_addr_len);
     } else {
-        std::cout << "[D] UN" << std::endl;
-        strncpy(ad, "Unknown AF", cl_addr_len);
+        strncpy(user_ip, "Unknown AF", cl_addr_len);
     }
-    s = ad;
+    s = user_ip;
 }
 
 static bool std_streams_dup(int sock_fd) {
+    out_fd = dup(STDOUT_FILENO);
     if (dup2(sock_fd, STDIN_FILENO) == -1) {
         std::cerr << "[myshell] Error while redirecting in/out streams to socket!" << std::endl;
         return false;
@@ -88,9 +99,8 @@ void start_server(void(*call_back)(), short int port) {
                 continue;
             case 0: {
                 get_addr(addr, &cl_addr, cl_addr_len);
-                std::cout << "[L] " << addr << std::endl;
+                write_logs("User connected");
                 if (std_streams_dup(connection_sock)) {
-                    std::cout << "message to client" << std::endl;
                     call_back();
                 }
                 std::cerr << "[myshell] Error: unexpected exit of client!" << std::endl;
@@ -104,14 +114,3 @@ void start_server(void(*call_back)(), short int port) {
         }
     }
 }
-
-/*
-  Based on
-
-  ECHOSERV.C
-  ==========
-  (c) Paul Griffiths, 1999
-  Email: mail@paulgriffiths.net
-
-  Simple TCP/IP echo server.
-*/

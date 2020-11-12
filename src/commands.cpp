@@ -20,6 +20,9 @@ void matexit() {
     if (state != 2) {
         write_history(nullptr);
     }
+    if (state == 2) {
+        write_logs("User exited.");
+    }
     fclose(rl_instream);
     exit(EXIT_FAILURE); // -V2014
 }
@@ -192,4 +195,20 @@ parsed_args pars(const std::vector<std::string> &argv, const std::string &help_m
         std::cout << help_msg << "\n" << visible << std::endl;
     }
     return parsed_args{static_cast<bool>(vm.count("help")), vector};
+}
+
+void write_logs(const std::string &log) {
+    char tm_s[100];
+    time_t t = time(nullptr);
+    struct tm tm = *localtime(&t);
+    sprintf(tm_s, "%d-%02d-%02d %02d:%02d:%02d : %s : [L]",
+            tm.tm_year + 1900,
+            tm.tm_mon + 1,
+            tm.tm_mday,
+            tm.tm_hour,
+            tm.tm_min,
+            tm.tm_sec, user_ip);
+    write(out_fd, tm_s, strlen(tm_s));
+    write(out_fd, log.data(), log.size());
+    write(out_fd, "\n", 2);
 }

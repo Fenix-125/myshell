@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(PROJECT_NAME myshell)
 project(${PROJECT_NAME} CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Options
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors." ON)
