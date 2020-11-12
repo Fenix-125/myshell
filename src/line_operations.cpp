@@ -39,6 +39,7 @@ std::string read_line(bool internal_func) {
     line.reserve(1000);
     std::string prompt = std::filesystem::current_path().string() + " $ ";
     line = readline(prompt.c_str());
+//    write(1, line.data(), line.size());
     if (line[0] != '\0')
         add_history(line.data());
     if (line.empty()) {

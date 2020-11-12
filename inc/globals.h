@@ -6,6 +6,7 @@
 #define MYSHELL_GLOBALS_H
 
 extern __thread int merrno_val;
-extern __thread bool serv;
-extern __thread bool script;
+
+extern __thread int state; // 0 - shell, 1 - script, 2 - server
+
 #endif //MYSHELL_GLOBALS_H

@@ -11,8 +11,7 @@
 #include "globals.h"
 #include "options_parser.h"
 
-bool __thread serv = false;
-bool __thread script = false;
+int __thread state = 0;
 
 command_line_options parse_arguments(int argc, char **argv);
 
@@ -28,7 +27,7 @@ int main(int argc, char **argv) {
             std::cerr << "Error: Server do not process script files" << std::endl;
             return EXIT_FAILURE;
         }
-        serv = true;
+        state = 2;
         rl_bind_key('\r', []([[maybe_unused]]int a, [[maybe_unused]] int b) { return 0; });
         start_server(loop, conf.get_port());
     }
@@ -37,7 +36,7 @@ int main(int argc, char **argv) {
         if (std::filesystem::path(filename).extension() == ".msh") {
             rl_instream = fopen(filename.data(), "r");
             rl_outstream = rl_instream;
-            script = true;
+            state = 1;
             if (rl_instream == nullptr) {
                 std::cerr << "File \"" << filename.data() << "\" does not exists. Stopping program" << std::endl;
                 return EXIT_FAILURE;

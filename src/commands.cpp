@@ -17,7 +17,7 @@
 #include "shell.h"
 
 void matexit() {
-    if (!serv) {
+    if (state != 2) {
         write_history(nullptr);
     }
     fclose(rl_instream);
