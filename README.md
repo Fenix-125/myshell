@@ -52,6 +52,7 @@ telnet localhost 6666
 - forage ground execution (only if there is space before `&`)
 - redirecting of stdin, stdout, stderr
 - add subshell variables
+- can be used as server
 
 ### Additional
 
