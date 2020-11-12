@@ -208,7 +208,15 @@ void write_logs(const std::string &log) {
             tm.tm_hour,
             tm.tm_min,
             tm.tm_sec, user_ip);
-    write(out_fd, tm_s, strlen(tm_s));
-    write(out_fd, log.data(), log.size());
-    write(out_fd, "\n", 2);
+    auto status = write(out_fd, tm_s, strlen(tm_s));
+    if (status == 0) {
+        status = write(out_fd, log.data(), log.size());
+    }
+    if (status == 0) {
+        status = write(out_fd, "\n", 2);
+    }
+    if (status != 0) {
+        return;
+    }
+    std::cerr << "[myshell] error writing logs" << std::endl;
 }
